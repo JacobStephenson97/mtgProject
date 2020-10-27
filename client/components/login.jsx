@@ -59,7 +59,7 @@ export const Register = () => {
     <div className={classes.loginContainer}>
       <Card className={classes.loginCard}>
       <div >
-        <h1 className={classes.title}>Login BABY</h1>
+        <h1 className={classes.title}>Login</h1>
       </div> 
       <div className="form-group">
         <TextField
