@@ -1,16 +1,17 @@
 import React from 'react';
-import { Register } from './components/login'
-import { Logout } from './components/logout'
+import { Register } from '../Login/Login'
+import { Logout } from '../Login/Logout'
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
+import ButtonAppBar from '../NavBar/NavBar'
+import { Router, Route, Switch } from 'react-router';
 
 class AppComponent extends React.Component {
   render() {
     const { user } = this.props;
     return (
       <div>
-        {!user   && <Register />}
-        {user && <Logout />}
+        <ButtonAppBar />
       </div>
     );
   }
