@@ -7,6 +7,7 @@ import { Meteor } from 'meteor/meteor';
 import { BrowserRouter as Router, Route, Switch, Redirect, useHistory } from "react-router-dom";
 import { ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
 
+
 const useStyles = makeStyles((theme) => ({
   loginButton: {
     marginRight: 10,
@@ -51,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 
-export const Register = () => {
+export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const classes = useStyles();
@@ -73,9 +74,10 @@ export const Register = () => {
     );
   }
   function handleLogin() {
+    console.log('CALLED')
     Meteor.loginWithPassword(email, password, error => {
-      if (error) console.log(error);
-      else history.push("/");
+      if (error) console.log('ERROR');
+    console.log('SUCCESS')
     });
   }
   return (
@@ -119,7 +121,7 @@ export const Register = () => {
         <Button onClick={handleRegister} variant="outlined" color="primary" className={classes.registerButton}>
           Register
         </Button>
-        <Button type="submit" variant="contained" color="primary" className={classes.loginButton} onClick={handleLogin}>
+        <Button variant="contained" color="primary" className={classes.loginButton} onClick={handleLogin}>
           Login
         </Button>
         </ValidatorForm>

@@ -1,5 +1,5 @@
 import React from 'react';
-import MtgCard from '../CardComponent/Cards'
+import MtgCard from './Card'
 import { makeStyles, rgbToHex } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => ({

@@ -1,5 +1,8 @@
 import { Meteor } from 'meteor/meteor';
-import './collections/mtgCards.js'
-Meteor.startup(() => {
-  // code to run on server at startup
-});
+import { Cards } from '../both/collections'
+const bound = Meteor.bindEnvironment((callback) => {callback();});
+
+Meteor.startup(function () {
+
+  }
+);

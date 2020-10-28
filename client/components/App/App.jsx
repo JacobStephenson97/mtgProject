@@ -4,13 +4,20 @@ import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import ButtonAppBar from '../NavBar/NavBar'
 import { Router, Route, Switch } from 'react-router';
-
+import {Cards} from '../../../both/collections'
+import MtgCard from '../CardComponent/Card'
 class AppComponent extends React.Component {
   render() {
-    const { user } = this.props;
+    const { cards } = this.props;
     return (
       <div>
         <ButtonAppBar />
+        {
+          cards.map(card => (
+              <MtgCard/>
+
+          ))
+        }
       </div>
     );
   }
@@ -18,6 +25,6 @@ class AppComponent extends React.Component {
 
 export default withTracker(() => {
   return {
-      user: Meteor.user(),
-  };
+      cards: Cards.find().fetch(),
+  };  
 })(AppComponent);
