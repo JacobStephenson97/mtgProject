@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import { Meteor } from 'meteor/meteor';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,6 +18,14 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  appBar: {
+    position: 'relative',
+    backgroundColor: 'rgba(21, 11, 1)'
+  },
+  loginLogoutButton: {
+    position: 'absolute',
+    right: 20
+  }
 }));
 
 export default function ButtonAppBar() {
@@ -24,15 +33,14 @@ export default function ButtonAppBar() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" className={classes.appBar}>
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" className={classes.title}>
-            News
-          </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit" href='/play'>
+            <Typography variant="h6" className={classes.title}>
+            Play
+            </Typography>
+          </Button>
+          {!Meteor.user() ? <Button color="inherit" href='/login' className={classes.loginLogoutButton}>Login</Button> : <Button className={classes.loginLogoutButton} color="inherit" onClick={() => Meteor.logout()} >Logout</Button>}
         </Toolbar>
       </AppBar>
     </div>

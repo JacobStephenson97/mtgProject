@@ -1,6 +1,5 @@
 import React from 'react';
 import { Register } from '../Login/Login'
-import { Logout } from '../Login/Logout'
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from 'meteor/react-meteor-data';
 import ButtonAppBar from '../NavBar/NavBar'

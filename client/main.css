@@ -1,4 +1,7 @@
 body {
   padding: 10px;
   font-family: sans-serif;
+  background-image: url('/mtgbackground.jpg');
+  background-position-y: 5%;
+  
 }
