@@ -15,6 +15,7 @@
     "history": "^5.0.0",
     "jquery": "^3.5.1",
     "meteor-node-stubs": "^1.0.1",
+    "mtgsdk": "^0.4.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-material-ui-form-validator": "^2.1.1",
