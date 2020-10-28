@@ -76,8 +76,8 @@ export default function Register() {
   function handleLogin() {
     console.log('CALLED')
     Meteor.loginWithPassword(email, password, error => {
-      if (error) console.log('ERROR');
     console.log('SUCCESS')
+      if (error) console.log('ERROR');
     });
   }
   return (

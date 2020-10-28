@@ -56,7 +56,12 @@ const useStyles = makeStyles((theme) => ({
   },
   loginLogoutButton: {
     position: 'absolute',
-    right: 20
+    right: 0
+  },
+  LogoutButton: {
+    position: 'absolute',
+    right: 20,
+    top: 8
   }
 }));
 
@@ -66,10 +71,10 @@ function a11yProps(index) {
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
-export default function ButtonAppBar(props) {
+export const ButtonAppBar = (props)=> {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0);
-  const isLoggedIn = Meteor.userId() !== null; 
+  const [value, setValue] = React.useState(0);  
+  console.log(props)
   const { user } = props;
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -80,7 +85,7 @@ export default function ButtonAppBar(props) {
         <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
           <Tab label="Home" {...a11yProps(0)}/>
           <Tab label="Decks" {...a11yProps(1)}/>
-          {!user ? <Tab label="Login" color="inherit" className={classes.loginLogoutButton}  {...a11yProps(2)}/> : <Button className={classes.loginLogoutButton} color="inherit" onClick={() => Meteor.logout()} >Logout</Button>}
+          {!user ? <Tab label="Login" color="inherit" className={classes.loginLogoutButton}  {...a11yProps(2)}/> : <Button className={classes.LogoutButton} color="inherit" onClick={() => Meteor.logout()} >Logout</Button>}
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={2}>
@@ -90,8 +95,9 @@ export default function ButtonAppBar(props) {
   );
 }
 
-const NavBarContainer = withTracker(() => {
-  return {
-      user: Meteor.user(),
-  };  
+export default NavBarContainer = withTracker((props) => {
+  const sub = Meteor.user();
+    return {
+      user: Meteor.user()
+    }
 })(ButtonAppBar);

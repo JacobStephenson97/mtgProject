@@ -13,10 +13,7 @@ class AppComponent extends React.Component {
       <div>
         <ButtonAppBar />
         {
-          cards.map(card => (
-              <MtgCard/>
-
-          ))
+         <MtgCard/>
         }
       </div>
     );
