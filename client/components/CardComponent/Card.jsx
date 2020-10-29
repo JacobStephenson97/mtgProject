@@ -1,7 +1,5 @@
 import React from 'react';
 
 export default props => (
-  <div>
-    {props.card.name}
-  </div>
+    <img src={props.card.imageUrl} alt="" width='187' height='262'/>
 )

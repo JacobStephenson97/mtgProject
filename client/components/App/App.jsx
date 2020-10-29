@@ -5,16 +5,13 @@ import { withTracker } from 'meteor/react-meteor-data';
 import ButtonAppBar from '../NavBar/NavBar'
 import { Router, Route, Switch } from 'react-router';
 import {Cards} from '../../../both/collections'
-import MtgCard from '../CardComponent/Card'
-class AppComponent extends React.Component {
+import MtgCard from '../CardComponent/Cards'
+export class AppComponent extends React.Component {
   render() {
     const { cards } = this.props;
     return (
       <div>
-        <ButtonAppBar />
-        {
-         <MtgCard/>
-        }
+        <MtgCard cards={this.props.cards}/>
       </div>
     );
   }

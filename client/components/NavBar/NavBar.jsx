@@ -13,24 +13,30 @@ import Tab from '@material-ui/core/Tab';
 import PropTypes from 'prop-types';
 import Register from '../Login/Login'
 import { withTracker } from 'meteor/react-meteor-data';
+import AppComponent from '../App/App'
+import DeckBuilder from '../DeckBuilder/DeckBuilder'
+import Container from '@material-ui/core/Container';
+
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+  const {children, value, index, classes, ...other} = props;
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
+      <div
+          role="tabpanel"
+          hidden={value !== index}
+          id={`simple-tabpanel-${index}`}
+          aria-labelledby={`simple-tab-${index}`}
+          {...other}
+      >
+          {value === index && (
+              <Container>
+                  <Box>
+                      {children}
+                  </Box>
+              </Container>
+          )}
+      </div>
   );
 }
 
@@ -79,7 +85,6 @@ function a11yProps(index) {
 export const ButtonAppBar = (props)=> {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);  
-  console.log(props)
   const { user } = props;
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -88,11 +93,18 @@ export const ButtonAppBar = (props)=> {
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
         <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-          <Tab label="Home" {...a11yProps(0)} className={classes.tabs}/>
-          <Tab label="Decks" {...a11yProps(1)} className={classes.tabs}/>
-          {!user ? <Tab label="Login" color="inherit" className={classes.loginLogoutButton}  {...a11yProps(2)}/> : <Button className={classes.LogoutButton} color="inherit" onClick={() => Meteor.logout()} >Logout</Button>}
+          <Tab label="Home" id="simple-tab-0" className={classes.tabs}/>
+          <Tab label="Decks" id="simple-tab-1"  className={classes.tabs}/>
+          {!user ? <Tab label="Login" color="inherit" className={classes.loginLogoutButton}  id="simple-tab-2" /> : undefined }
         </Tabs>
+        {user ? <Button className={classes.LogoutButton} color="inherit" onClick={() => Meteor.logout()} >Logout</Button> : undefined}
       </AppBar>
+      <TabPanel value={value} index={0}>
+        <AppComponent />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <DeckBuilder />
+      </TabPanel>
       <TabPanel value={value} index={2}>
         <Register />
       </TabPanel>

@@ -104,7 +104,6 @@ export default function Register() {
               errorMessages={['this field is required', 'Email is not valid']}  
             />
         </div>
-
         <div className="form-group">
           <TextValidator
             type="password"

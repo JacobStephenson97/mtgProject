@@ -7,8 +7,8 @@ import { Register } from '../Login/Login'
 import { Meteor } from 'meteor/meteor';
 import {_ShowNumbers} from '../DeckBuilder/DeckBuilder'
 import ButtonAppBar from '../NavBar/NavBar'
+import {Cards} from '../../../both/collections'
 Meteor.startup(() => {
-  console.log(Meteor)
   const isLoggedIn = Meteor.userId() !== null; 
   render((
     <ButtonAppBar />
