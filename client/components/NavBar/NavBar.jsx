@@ -56,12 +56,17 @@ const useStyles = makeStyles((theme) => ({
   },
   loginLogoutButton: {
     position: 'absolute',
-    right: 0
+    right: 0,
+    fontSize: 20
   },
   LogoutButton: {
     position: 'absolute',
     right: 20,
-    top: 8
+    color: 'rgba(220, 220, 220)',
+    fontSize: 20
+  },
+  tabs: {
+    fontSize: 20
   }
 }));
 
@@ -83,8 +88,8 @@ export const ButtonAppBar = (props)=> {
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
         <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-          <Tab label="Home" {...a11yProps(0)}/>
-          <Tab label="Decks" {...a11yProps(1)}/>
+          <Tab label="Home" {...a11yProps(0)} className={classes.tabs}/>
+          <Tab label="Decks" {...a11yProps(1)} className={classes.tabs}/>
           {!user ? <Tab label="Login" color="inherit" className={classes.loginLogoutButton}  {...a11yProps(2)}/> : <Button className={classes.LogoutButton} color="inherit" onClick={() => Meteor.logout()} >Logout</Button>}
         </Tabs>
       </AppBar>

@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: 'center',
     width: '100%',
-    marginTop: 300,
+    marginTop: 250,
     opacity: .90,
  
   },
