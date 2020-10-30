@@ -56,8 +56,10 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   appBar: {
-    position: 'relative',
-    backgroundColor: 'rgba(21, 11, 1)'
+    position: 'absolute',
+    backgroundColor: 'rgba(21, 11, 1)',
+    width: '98%',
+    height: '5%'
   },
   loginLogoutButton: {
     position: 'absolute',
@@ -68,10 +70,14 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     right: 20,
     color: 'rgba(220, 220, 220)',
-    fontSize: 20
+    fontSize: '1vw'
   },
   tabs: {
-    fontSize: 20
+    height: '100%',
+    fontSize: '1vw',
+  },
+  tabBar: {
+    height: '100%',
   }
 }));
 
@@ -91,7 +97,7 @@ export const ButtonAppBar = (props)=> {
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
-        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" className={classes.tabBar}>
           <Tab label="Home" id="simple-tab-0" className={classes.tabs}/>
           <Tab label="Decks" id="simple-tab-1"  className={classes.tabs}/>
           {!user ? <Tab label="Login" color="inherit" className={classes.loginLogoutButton}  id="simple-tab-2" /> : undefined }

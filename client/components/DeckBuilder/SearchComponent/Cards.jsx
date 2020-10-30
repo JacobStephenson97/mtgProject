@@ -5,11 +5,16 @@ import { makeStyles, rgbToHex } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
   cardsContainer: {
     width: window.innerWidth - 100,
-    height: 265,
+    height: '98%',
     overflowY: 'auto',
     direction: 'horizontal',
-    width: 780,
-    
+    width: '100%',
+  },
+  test: {
+    position: 'absolute',
+    width: window.innerWidth - 100,
+    overflowX: 'auto',
+    width: '96%'
   },
   '@global': {
     '*::-webkit-scrollbar': {
