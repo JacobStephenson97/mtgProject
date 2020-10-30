@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
   graphsContainer: {
     width: 1050,
-    height: 350,
+    height: 360,
     overflow: 'auto',
     color: 'white',  
     backgroundColor: 'white'
