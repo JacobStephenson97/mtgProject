@@ -15,6 +15,7 @@
     "chart.js": "^2.9.4",
     "history": "^5.0.0",
     "jquery": "^3.5.1",
+    "material-ui-dropzone": "^3.5.0",
     "material-ui-search-bar": "^1.0.0",
     "meteor-node-stubs": "^1.0.1",
     "mtgsdk": "^0.4.3",
