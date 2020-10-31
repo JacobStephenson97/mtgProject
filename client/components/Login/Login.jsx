@@ -35,12 +35,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: 'center',
     width: '100%',
-    marginTop: 250,
+    paddingTop: 250,
     opacity: .90,
- 
   },
   loginCard: {
-    padding: 40,    
+    padding: 40,
   },
   icon: {
     width: 100,
@@ -49,10 +48,9 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 'auto',
     display: 'block'
   }
-  
 }));
 
-export default function Register() {
+export default ({ setTab }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const classes = useStyles();
@@ -69,40 +67,42 @@ export default function Register() {
     Accounts.createUser(
       { email: email, password: password },
       error => {
-        console.log(error);
+        if (error) console.log(error);
+        else setTab(0);
       }
     );
   }
+
   function handleLogin() {
-    console.log('CALLED')
     Meteor.loginWithPassword(email, password, error => {
-    console.log('SUCCESS')
       if (error) console.log('ERROR');
+      else setTab(0);
     });
   }
+
   return (
       <div className={classes.loginContainer}>
         <Card className={classes.loginCard}>
         <div >
           <img src='/mtgicon.jpg' className={classes.icon}/>
-        </div> 
+        </div>
         <ValidatorForm
           ref={inputRef}
           onSubmit={handleLogin}
           onError={errors => console.log(errors)}
           >
         <div className="form-group">
-            <TextValidator
-              type="email"
-              value={email}
-              onChange={(e) => handleValueChange(e, 'email')}
-              id="standard-basic"
-              label='Email'
-              aria-describedby="emailHelp"
-              className={classes.loginTextFields}
-              validators={['required', 'isEmail']}
-              errorMessages={['this field is required', 'Email is not valid']}  
-            />
+          <TextValidator
+            type="email"
+            value={email}
+            onChange={(e) => handleValueChange(e, 'email')}
+            id="standard-basic"
+            label='Email'
+            aria-describedby="emailHelp"
+            className={classes.loginTextFields}
+            validators={['required', 'isEmail']}
+            errorMessages={['this field is required', 'Email is not valid']}
+          />
         </div>
         <div className="form-group">
           <TextValidator
@@ -114,7 +114,7 @@ export default function Register() {
             className={classes.loginTextFields}
             onSubmit={handleLogin}
             validators={['required']}
-            errorMessages={['this field is required']} 
+            errorMessages={['this field is required']}
           />
         </div>
         <Button onClick={handleRegister} variant="outlined" color="primary" className={classes.registerButton}>

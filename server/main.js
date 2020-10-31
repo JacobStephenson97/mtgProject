@@ -19,7 +19,7 @@ const insertCard = card => {
 }
 
 const startup = () => {
-  if (!Cards.find().count() === 0) return;
+  if (Cards.find().count() > 0) return;
   mtg.card.all().on('data', insertCard);
 }
 
