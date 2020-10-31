@@ -19,7 +19,6 @@
 1 Flamekin Village
 13 Forest
 1 Greenwarden of Murasa
-1 Growing Rites of Itlimoc // Itlimoc, Cradle of the Sun
 1 Gruul Turf
 1 Hamletback Goliath
 1 Hammer of Purphoros

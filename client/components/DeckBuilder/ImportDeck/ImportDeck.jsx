@@ -4,114 +4,90 @@ import Button from "@material-ui/core/Button";
 import { Cards } from "../../../../both/collections";
 import { withTracker } from "meteor/react-meteor-data";
 import { makeStyles } from "@material-ui/core/styles";
+import { Meteor } from 'meteor/meteor';
+import _, { map } from 'underscore';
 
 
-const useStyles = makeStyles((theme) => ({
-  toggleGraphButton: {
-    color: "#C8C8C8",
-    borderColor: "#C8C8C8",
-    "&:hover": {
-      backgroundColor: "rgba(72,72,72,0.7)",
-      borderColor: "rgba(255, 255, 255)",
-      color: "rgba(255, 255, 255)",
-    },
-  }
-}));
 
-
-function importDeck(files, setMountainCount, setIslandCount, setSwampCount, setPlainsCount, setForestCount) {
+function importDeck(files, setDeckIsReady, setState, sub) {
 
   let reader = new FileReader();
   reader.readAsText(files[0]);
 
   reader.onload = function () {
-    let newCardArray = [];
     let cardArray = reader.result.split("\n");
-    for (let i = 0; i < cardArray.length; i++) {
-      if (cardArray[i].includes("1 ")) {
-        newCardArray.push(cardArray[i].slice(2));
-      } else {
-        if (cardArray[i].includes("Mountain")) {
-          let count = parseInt(cardArray[i].slice(0, 2), 10);
-          setMountainCount(count)
-        }
-        if (cardArray[i].includes("Island")) {
-          let count = parseInt(cardArray[i].slice(0, 2), 10);
-          setIslandCount(count)
-        }
-        if (cardArray[i].includes("Swamp")) {
-          let count = parseInt(cardArray[i].slice(0, 2), 10);
-          setSwampCount(count)
-        }
-        if (cardArray[i].includes("Plains")) {
-          let count = parseInt(cardArray[i].slice(0, 2), 10);
-          setPlainsCount(count)
-        }
-        if (cardArray[i].includes("Forest")) {
-          let count = parseInt(cardArray[i].slice(0, 2), 10);
-          setForestCount(count)
-        }
-        newCardArray.push(cardArray[i].slice(3));
-      }
-      Meteor.subscribe("cardSearchTwo", newCardArray[i]);
-    }
+    let cardArrayFiltered = cardArray.filter(Boolean)
+    const countObj = cardArrayFiltered.reduce((acc, next) => {
+      count = next.substr(0, next.indexOf(' ')); 
+      name = next.substr(next.indexOf(' ') + 1); 
+      return {...acc, [name]: count}
+    }, {});
+    console.log(countObj)
+    sub.stop()
+    const subscription = Meteor.subscribe('cardSearchTwo', Object.keys(countObj), {onReady() {setDeckIsReady(true)}})
+    setState({deckLength : Object.keys(countObj).length, countObj, subscription})
   };
 }
 
-export const DeckImport = ({currentDeck, setCurrentDeck, importCards, importDeckFinal}) => {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-  const [mountainCount, setMountainCount] = useState(0);
-  const [islandCount, setIslandCount] = useState(0);
-  const [swampCount, setSwampCount] = useState(0);
-  const [plainsCount, setPlainsCount] = useState(0);
-  const [forestCount, setForestCount] = useState(0);
+export class DeckImport extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      open: false,
+      deckIsReady: false,
+      deckLength: 0,
+      countObj: {},
+      subscription: {stop(){}}
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.deckLength > 0 && this.props.importCards.length === this.state.deckLength && this.state.deckIsReady) {
+      this.props.importDeckFinal(this.props.importCards, this.props.setCurrentDeck, this.state.countObj) 
+      this.setState({deckIsReady: false, deckLength : 0, countObj: {}})
+    }
+  }
 
-  return (
-    <div>
-      <Button
-        className={classes.toggleGraphButton}
-        variant="outlined"
-        color="primary"
-        component="label"
-        onClick={() => setOpen(true)}>
-        Upload
-        </Button>
-        <DropzoneDialog
-        acceptedFiles={["text/*"]}
-        cancelButtonText={"cancel"}
-        submitButtonText={"submit"}
-        maxFileSize={5000000}
-        open={open}
-        onClose={() => setOpen(false)}
-        onSave={(files) => {
-            importDeck(
-            files,
-            setMountainCount,
-            setIslandCount,
-            setSwampCount,
-            setPlainsCount,
-            setForestCount
-            );
-          setOpen(false);
-          }}
-        showPreviews={true}
-        showFileNamesInPreview={true}
-        />
+  render() {
+    console.log(this.state.deckLength, this.props.importCards.length)
+    return (
+      <div>
         <Button
-        className={classes.toggleGraphButton}
-        variant="outlined"
-        color="primary"
-        onClick={() => importDeckFinal(importCards, setCurrentDeck, mountainCount, islandCount, swampCount, plainsCount, forestCount)}>
-        Import
-        </Button>
-    </div>
-  )
+          variant="outlined"
+          color="primary"
+          component="label"
+          onClick={() => this.setState({open: true})}>
+          Upload
+          </Button>
+          <DropzoneDialog
+          acceptedFiles={["text/*"]}
+          cancelButtonText={"cancel"}
+          submitButtonText={"submit"}
+          maxFileSize={5000000}
+          open={this.state.open}
+          onClose={() => this.setState({open: false})}
+          onSave={(files) => {
+              importDeck(
+              files,
+              (deckIsReady) => this.setState({deckIsReady}),
+              (state) => this.setState(state),
+              this.state.subscription
+              );
+            this.setState({open: false});
+            }}
+          showPreviews={true}
+          showFileNamesInPreview={true}
+          />
+      </div>
+    )
+  }
 }
 
 
 export default withTracker(props => {
+  const cards = Cards.find({}, { sort: {name: 1}}).fetch();
+  const uniqueNames = _.uniq(cards.map(function(x) {return x.name;}), true)
+  console.log(cards)
   return {
-    importCards: Cards.find().fetch(),
+    importCards: uniqueNames.map(name => cards.find(({ name: cName }) => cName === name))
   };
 })(DeckImport);

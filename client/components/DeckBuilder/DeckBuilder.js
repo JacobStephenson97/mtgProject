@@ -11,6 +11,8 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import StatsPanel from "./StatsPanel/StatsPanel";
 import DeckImport from "./ImportDeck/ImportDeck";
 import SearchArea from "./SearchArea/SearchArea";
+import SaveComponent from "./SaveAreaComponent/SaveAreaComponent";
+import LoadComponent from "./LoadDeckComponent/LoadDeckComponent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -110,43 +112,15 @@ const useStyles = makeStyles((theme) => ({
 function addCard(cardObject, setCurrentDeck) {
   setCurrentDeck((oldDeck) => [...oldDeck, cardObject]);
 }
-function importDeckFinal(
-  deck,
-  setCurrentDeck,
-  mountains,
-  islands,
-  swamps,
-  plains,
-  forests
-) {
-  console.log("ADDING TO DECK");
+function importDeckFinal(deck, setCurrentDeck, countObj) {
+  const newDeck = [];
   deck.forEach((card) => {
-    if (card.name == "Mountain") {
-      for (let i = 0; i < mountains; i++) {
-        deck.push(card);
-      }
-    }
-    if (card.name == "Island") {
-      for (let i = 0; i < islands; i++) {
-        deck.push(card);
-      }
-    }
-    if (card.name == "Swamp") {
-      for (let i = 0; i < swamps; i++) {
-        deck.push(card);
-      }
-    }
-    if (card.name == "Plains") {
-      for (let i = 0; i < plains; i++) {
-        deck.push(card);
-      }
-    }
-    if (card.name == "Forest") {
-      for (let i = 0; i < forests; i++) {
-        deck.push(card);
-      }
-    }
+    const count = countObj[card.name];
+    for (let i = 0; i < count; i++) newDeck.push(card);
   });
+  setCurrentDeck(newDeck);
+}
+function loadDeck(deck, setCurrentDeck) {
   setCurrentDeck(deck);
 }
 function removeCard(cardObject, setCurrentDeck, currentDeck) {
@@ -177,6 +151,7 @@ export function DeckBuilder(props) {
   const [toggleGraph, setToggleGraph] = useState([false]);
   const [search, setSearch] = useState(null);
   const [subscription, setSubscription] = useState(null);
+  const [deckName, setDeckName] = React.useState("");
   return (
     <div>
       <SearchArea
@@ -221,6 +196,17 @@ export function DeckBuilder(props) {
       </Card>
       <div className={classes.deckButtons}>
         <ButtonGroup>
+          <SaveComponent
+            currentDeck={currentDeck}
+            deckName={deckName}
+            setDeckName={setDeckName}
+          />
+          <LoadComponent
+            setCurrentDeck={setCurrentDeck}
+            loadDeck={loadDeck}
+            deckName={deckName}
+            setDeckName={setDeckName}
+          />
           {toggleGraph ? (
             <Button
               className={classes.toggleGraphButton}

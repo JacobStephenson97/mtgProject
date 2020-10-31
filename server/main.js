@@ -1,15 +1,21 @@
 import { Meteor } from "meteor/meteor";
-import { Cards } from "../both/collections";
+import { Cards, Decks } from "../both/collections";
 import mtg from "mtgsdk";
 
 const bound = Meteor.bindEnvironment((cb) => cb());
 const limit = [{ limit: 20 }, { limit: 1 }];
 const queryFrom = (s) => ({ name: { $regex: new RegExp(s, "i") } });
 const search = (search) => Cards.find(queryFrom(search), limit[0]);
-const searchTwo = (search) => Cards.find(queryFrom(search), limit[1]);
 
 Meteor.publish("cardSearch", search);
-Meteor.publish("cardSearchTwo", searchTwo);
+Meteor.publish("cardSearchTwo", function (cardName) {
+  console.log(cardName);
+  console.log(Cards.find({ name: { $in: cardName } }).count());
+  return Cards.find({ name: { $in: cardName } });
+});
+Meteor.publish("decks", function (userId) {
+  return Decks.find({ userID: userId }, { name: 1 });
+});
 
 const insertCard = (card) => {
   const { number = "", imageUrl = "" } = card;
