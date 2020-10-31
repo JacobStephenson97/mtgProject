@@ -1,22 +1,26 @@
 import { Meteor } from 'meteor/meteor';
 import { Cards } from '../both/collections'
-const bound = Meteor.bindEnvironment((callback) => {callback();});
-const mtg = require('mtgsdk')
+import mtg from "mtgsdk";
 
-Meteor.publish("cardSearch", function(search) {
-  return Cards.find({name: {$regex: new RegExp(search, "i") }}, {limit: 20})
-});
+const bound = Meteor.bindEnvironment(cb => cb());
+const limit =  { limit: 20 };
+const queryFrom = s => ({ name: { $regex: new RegExp(s, "i") }})
+const search = (search) => Cards.find(queryFrom(search), limit);
 
-Meteor.startup(function () {
-  if (Cards.find().count() === 0) {
-    mtg.card.all()
-    .on('data', function (card) {
-      bound(() => {
-        if(!card.number.includes('★') && card.imageUrl.includes('h')) {
-          Cards.insert(card)
-          console.log(card.name)
-      }
-    });
-  })
+Meteor.publish("cardSearch", search)
+
+const insertCard = card => {
+  const { number = "", imageUrl = "" } = card;
+  bound(() => {
+    if(!(!number.includes('★') && imageUrl.includes('h'))) return
+    Cards.insert(card)
+    console.log(card.name)
+  });
 }
-})
+
+const startup = () => {
+  if (!Cards.find().count() === 0) return;
+  mtg.card.all().on('data', insertCard);
+}
+
+Meteor.startup(startup);
