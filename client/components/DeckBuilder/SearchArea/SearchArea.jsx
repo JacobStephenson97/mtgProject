@@ -62,6 +62,7 @@ export function SearchArea({ cards, addCard, currentDeck, setCurrentDeck, search
             placeholder="Search Cards..."
             variant="outlined"
             className={classes.inputBase}
+            autoComplete="off"
           />
         </Card>
         <Card className={classes.searchCard}>
@@ -77,7 +78,6 @@ export function SearchArea({ cards, addCard, currentDeck, setCurrentDeck, search
 }
 
 export default withTracker(props => {
-  console.log(props.search)
   return {
     cards: Cards.find({name: {$regex: new RegExp(props.search, "i") }}, {limit: 20}).fetch(),
   };
