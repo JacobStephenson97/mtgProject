@@ -7,19 +7,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Meteor } from 'meteor/meteor';
 import _, { map } from 'underscore';
 
-const useStyles = makeStyles({
-  importButton: {
-    color: "#C8C8C8",
-    borderColor: "#C8C8C8",
-    "&:hover": {
-      backgroundColor: "rgba(72,72,72,0.7)",
-      borderColor: "rgba(255, 255, 255)",
-      color: "rgba(255, 255, 255)",
-    },
-  },
-});
 
-function importDeck(files, setDeckIsReady, setDeckLength, setCountObj, sub, setSubscription) {
+
+function importDeck(files, setDeckIsReady, setState, sub) {
 
   let reader = new FileReader();
   reader.readAsText(files[0]);
@@ -35,40 +25,37 @@ function importDeck(files, setDeckIsReady, setDeckLength, setCountObj, sub, setS
     console.log(countObj)
     sub.stop()
     const subscription = Meteor.subscribe('cardSearchTwo', Object.keys(countObj), {onReady() {setDeckIsReady(true)}})
-    setDeckLength(Object.keys(countObj).length)
-    setCountObj(countObj) 
-    setSubscription(subscription)
+    setState({deckLength : Object.keys(countObj).length, countObj, subscription})
   };
 }
 
-export function DeckImport({importCards, setCurrentDeck, importDeckFinal}) {
-  const classes = useStyles()
-  const [open, setOpen] = useState(false);
-  const [deckIsReady, setDeckIsReady] = useState(false);
-  const [deckLength, setDeckLength] = useState(0);
-  const [countObj, setCountObj] = useState({});
-  const [subscription, setSubscription] = useState({stop(){}})
-  console.log(importCards)
-  console.log(importCards.length, deckLength)
-   useEffect(() => {
-     console.log('test')
-     console.log(subscription)
-    if (deckLength > 0 && importCards.length === deckLength && deckIsReady) {
-      console.log('READY')
-      importDeckFinal(importCards, setCurrentDeck, countObj) 
-      setDeckIsReady(false) 
-      setDeckLength(0) 
-      setCountObj({})
+export class DeckImport extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      open: false,
+      deckIsReady: false,
+      deckLength: 0,
+      countObj: {},
+      subscription: {stop(){}}
     }
-  })
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.deckLength > 0 && this.props.importCards.length === this.state.deckLength && this.state.deckIsReady) {
+      this.props.importDeckFinal(this.props.importCards, this.props.setCurrentDeck, this.state.countObj) 
+      this.setState({deckIsReady: false, deckLength : 0, countObj: {}})
+    }
+  }
+
+  render() {
+    console.log(this.state.deckLength, this.props.importCards.length)
     return (
       <div>
         <Button
           variant="outlined"
           color="primary"
           component="label"
-          onClick={() => setOpen(true)}
-          className={classes.importButton}>
+          onClick={() => this.setState({open: true})}>
           Import
           </Button>
           <DropzoneDialog
@@ -76,29 +63,30 @@ export function DeckImport({importCards, setCurrentDeck, importDeckFinal}) {
           cancelButtonText={"cancel"}
           submitButtonText={"submit"}
           maxFileSize={5000000}
-          open={open}
-          onClose={() => setOpen(false)}
+          open={this.state.open}
+          onClose={() => this.setState({open: false})}
           onSave={(files) => {
               importDeck(
               files,
-              setDeckIsReady,
-              setDeckLength,
-              setCountObj,
-              subscription,
-              setSubscription
+              (deckIsReady) => this.setState({deckIsReady}),
+              (state) => this.setState(state),
+              this.state.subscription
               );
-            setOpen(false);
+            this.setState({open: false});
             }}
           showPreviews={true}
           showFileNamesInPreview={true}
           />
       </div>
     )
+  }
 }
+
 
 export default withTracker(props => {
   const cards = Cards.find({}, { sort: {name: 1}}).fetch();
   const uniqueNames = _.uniq(cards.map(function(x) {return x.name;}), true)
+  console.log(cards)
   return {
     importCards: uniqueNames.map(name => cards.find(({ name: cName }) => cName === name))
   };

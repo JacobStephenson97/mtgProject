@@ -9,6 +9,7 @@ import DeckAreaComponent from "./DeckAreaComponent/DeckAreaComponent";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import StatsPanel from "./StatsPanel/StatsPanel";
+import DeckImportBackup from "./ImportDeck/ImportDeckBackup";
 import DeckImport from "./ImportDeck/ImportDeck";
 import SearchArea from "./SearchArea/SearchArea";
 import SaveComponent from "./SaveAreaComponent/SaveAreaComponent";

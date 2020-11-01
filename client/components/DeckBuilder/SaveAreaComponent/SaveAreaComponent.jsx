@@ -9,8 +9,20 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { Decks } from "../../../../both/collections"
 import { Meteor } from 'meteor/meteor';
 import { withTracker } from "meteor/react-meteor-data";
-
+import { makeStyles } from '@material-ui/core/styles';
+const useStyles = makeStyles({
+  saveButton: {
+    color: "#C8C8C8",
+    borderColor: "#C8C8C8",
+    "&:hover": {
+      backgroundColor: "rgba(72,72,72,0.7)",
+      borderColor: "rgba(255, 255, 255)",
+      color: "rgba(255, 255, 255)",
+    },
+  },
+});
 export function SaveComponent({currentDeck, decks, deckName, setDeckName}) {
+  const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
 
@@ -32,7 +44,7 @@ export function SaveComponent({currentDeck, decks, deckName, setDeckName}) {
   }
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button variant="outlined" color="primary" onClick={handleClickOpen} className={classes.saveButton}>
         Save Deck
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">

@@ -30,7 +30,16 @@ const useStyles = makeStyles({
   removeButton: {
     color: 'red',
     marginRight: 10,
-  }
+  },
+  loadButton: {
+    color: "#C8C8C8",
+    borderColor: "#C8C8C8",
+    "&:hover": {
+      backgroundColor: "rgba(72,72,72,0.7)",
+      borderColor: "rgba(255, 255, 255)",
+      color: "rgba(255, 255, 255)",
+    },
+  },
 });
 function DeleteConfirm(props) {
   const classes = useStyles()
@@ -96,7 +105,7 @@ function SimpleDialog(props) {
 export function LoadComponent({ decks, setCurrentDeck, loadDeck, deckName, setDeckName }) {
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(null);
-
+  const classes = useStyles();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -108,7 +117,7 @@ export function LoadComponent({ decks, setCurrentDeck, loadDeck, deckName, setDe
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+      <Button variant="outlined" color="primary" onClick={handleClickOpen} className={classes.loadButton}>
         Load Deck
       </Button>
       <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} decks={decks} setCurrentDeck={setCurrentDeck} loadDeck={loadDeck} deckName={deckName} setDeckName={setDeckName}/>
