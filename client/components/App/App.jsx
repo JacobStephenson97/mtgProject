@@ -15,6 +15,7 @@ import DeckBuilder from '../DeckBuilder/DeckBuilder'
 import Container from '@material-ui/core/Container';
 import TabPanel from './TabPanel';
 import useStyles from './styles';
+import Scene from "../Scenes/test";
 
 function a11yProps(index) {
   return {
@@ -40,7 +41,7 @@ export const ButtonAppBar = (props)=> {
         {user ? <Button className={classes.LogoutButton} color="inherit" onClick={() => {Meteor.logout(); setValue(2)}} >Logout</Button> : undefined}
       </AppBar>
       <TabPanel value={value} index={0}>
-        HOME?
+        <Scene />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <DeckBuilder />
