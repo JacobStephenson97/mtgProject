@@ -14,10 +14,12 @@
     "bcrypt": "^5.0.0",
     "chart.js": "^2.9.4",
     "history": "^5.0.0",
+    "image-js": "^0.30.3",
     "jquery": "^3.5.1",
     "material-ui-search-bar": "^1.0.0",
     "meteor-node-stubs": "^1.0.1",
     "mtgsdk": "^0.4.3",
+    "node-fetch": "^2.6.1",
     "react": "^17.0.1",
     "react-chartjs-2": "^2.10.0",
     "react-charts": "^2.0.0-beta.7",
@@ -26,7 +28,10 @@
     "react-dom": "^17.0.1",
     "react-material-ui-form-validator": "^2.1.1",
     "react-router": "^5.2.0",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "three": "^0.122.0",
+    "three-obj-mtl-loader": "^1.0.3",
+    "three-orbitcontrols": "^2.110.3"
   },
   "meteor": {
     "mainModule": {
