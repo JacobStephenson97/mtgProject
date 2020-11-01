@@ -40,10 +40,22 @@ const useStyles = makeStyles({
       color: "rgba(255, 255, 255)",
     },
   },
+  paper: {
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    minWidth: '12%',
+  },
+  deckButton: {
+    fontSize: 20,
+    fontFamily: "Roboto"
+  },
+  dialogTitle: {
+    fontSize: 30,
+    textAlign: 'center'
+  }
 });
 function DeleteConfirm(props) {
   const classes = useStyles()
-  const { onClose, selectedValue, open, deckId, setOpenTwo} = props;
+  const { onClose, selectedValue, open, deckId, setOpenTwo, deckTarget, setOpen} = props;
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -52,23 +64,24 @@ function DeleteConfirm(props) {
   const handleDelete = (DeckId) => {
     Decks.remove(DeckId)
     setOpenTwo(false)
+    setOpen(true)
   }
 
   handleCloseTwo = () => {
     setOpenTwo(false)
+    setOpen(true)
   }
   return (
-    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-      <DialogTitle id="simple-dialog-title">Are you sure you want to delete?</DialogTitle>
-      <Button onClick={() => handleDelete(deckId)}>Yes</Button>
+    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} BackdropProps={{classes: {root: classes.backdrop,}}} PaperProps ={{classes: {root: classes.paper}}}>
+      <DialogTitle id="simple-dialog-title">Are you sure you want to delete {deckTarget.name}?</DialogTitle>
+      <Button onClick={() => handleDelete(deckTarget._id)}>Yes</Button>
       <Button onClick={handleCloseTwo}>No</Button>
     </Dialog>
   )
 }
 function SimpleDialog(props) {
   const classes = useStyles();
-  const { onClose, selectedValue, open, decks, setCurrentDeck, loadDeck, setDeckName} = props;
-  const [openTwo, setOpenTwo] = React.useState(false);
+  const { onClose, selectedValue, open, decks, setCurrentDeck, loadDeck, setDeckName, setDeckTarget, setOpen, setOpenTwo} = props;
   const handleClose = () => {
     onClose(selectedValue);
   };
@@ -79,21 +92,22 @@ function SimpleDialog(props) {
     onClose();
   };
 
-  const handleClickOpenTwo = () => {
+  const handleClickOpenTwo = (deck) => {
+    setDeckTarget(deck)
     setOpenTwo(true);
+    setOpen(false)
   };
 
   return (
-    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-      <DialogTitle id="simple-dialog-title">Pick a Deck</DialogTitle>
+    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} PaperProps ={{classes: {root: classes.paper}}}>
+      <DialogTitle disableTypography id="simple-dialog-title" className={classes.dialogTitle}>Pick a Deck</DialogTitle>
       <List>
-       {decks.map((deck) => (
-         <div className={classes.deckNameContainer}>
-          <ListItem button onClick={() => handleListItemClick(deck)} key={deck.name} className={classes.deckButton}>
-            <ListItemText primary={deck.name} />
+       {decks.map((deck, i) => (
+         <div className={classes.deckNameContainer} key={i}>
+          <ListItem button onClick={() => handleListItemClick(deck)} key={deck.name} className={classes.deckButtonContainer}>
+            <ListItemText disableTypography primary={deck.name} className={classes.deckButton}/>
           </ListItem>
-          <Button className={classes.removeButton} onClick={() => handleClickOpenTwo()}>Delete</Button>
-          <DeleteConfirm selectedValue={selectedValue} open={openTwo} onClose={handleClose} deckId={deck._id} setOpenTwo={setOpenTwo}/>
+          <Button className={classes.removeButton} onClick={() => handleClickOpenTwo(deck)} >Delete</Button>
           </div>
         ))
         }
@@ -105,11 +119,13 @@ function SimpleDialog(props) {
 export function LoadComponent({ decks, setCurrentDeck, loadDeck, deckName, setDeckName }) {
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(null);
+  const [openTwo, setOpenTwo] = React.useState(false);
+  const [deckTarget, setDeckTarget] = React.useState(false);
   const classes = useStyles();
   const handleClickOpen = () => {
     setOpen(true);
   };
-
+  console.log(openTwo)
   const handleClose = (value) => {
     setOpen(false);
     setSelectedValue(value);
@@ -120,7 +136,8 @@ export function LoadComponent({ decks, setCurrentDeck, loadDeck, deckName, setDe
       <Button variant="outlined" color="primary" onClick={handleClickOpen} className={classes.loadButton}>
         Load Deck
       </Button>
-      <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} decks={decks} setCurrentDeck={setCurrentDeck} loadDeck={loadDeck} deckName={deckName} setDeckName={setDeckName}/>
+      <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} decks={decks} setCurrentDeck={setCurrentDeck} loadDeck={loadDeck} deckName={deckName} setDeckName={setDeckName} openTwo={openTwo} setOpenTwo={setOpenTwo} setDeckTarget={setDeckTarget} setOpen={setOpen}/>
+      <DeleteConfirm selectedValue={selectedValue} open={openTwo} onClose={handleClose} setOpenTwo={setOpenTwo} deckTarget={deckTarget} setOpen={setOpen}/>
     </div>
   );
 }

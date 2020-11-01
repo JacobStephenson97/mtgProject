@@ -9,7 +9,6 @@ import DeckAreaComponent from "./DeckAreaComponent/DeckAreaComponent";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import StatsPanel from "./StatsPanel/StatsPanel";
-import DeckImportBackup from "./ImportDeck/ImportDeckBackup";
 import DeckImport from "./ImportDeck/ImportDeck";
 import SearchArea from "./SearchArea/SearchArea";
 import SaveComponent from "./SaveAreaComponent/SaveAreaComponent";
@@ -150,9 +149,10 @@ export function DeckBuilder(props) {
   const classes = useStyles();
   const [currentDeck, setCurrentDeck] = useState([]);
   const [toggleGraph, setToggleGraph] = useState([false]);
-  const [search, setSearch] = useState(null);
+  const [search, setSearch] = useState("");
   const [subscription, setSubscription] = useState(null);
   const [deckName, setDeckName] = React.useState("");
+  const [countObj, setCountObj] = React.useState({});
   return (
     <div>
       <SearchArea
@@ -229,6 +229,10 @@ export function DeckBuilder(props) {
             currentDeck={currentDeck}
             setCurrentDeck={setCurrentDeck}
             importDeckFinal={importDeckFinal}
+            search={search}
+            setSearch={setSearch}
+            countObj={countObj}
+            setCountObj={setCountObj}
           />
         </ButtonGroup>
       </div>

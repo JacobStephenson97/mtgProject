@@ -20,6 +20,36 @@ const useStyles = makeStyles({
       color: "rgba(255, 255, 255)",
     },
   },
+    deckButton: {
+    padding: 10,
+    fontFamily: 'Roboto',
+    marginLeft: 10,
+  },
+  removeButton: {
+    color: 'red',
+    marginRight: 10,
+  },
+  loadButton: {
+    color: "#C8C8C8",
+    borderColor: "#C8C8C8",
+    "&:hover": {
+      backgroundColor: "rgba(72,72,72,0.7)",
+      borderColor: "rgba(255, 255, 255)",
+      color: "rgba(255, 255, 255)",
+    },
+  },
+  paper: {
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    minWidth: '12%',
+  },
+  deckButton: {
+    fontSize: 20,
+    fontFamily: "Roboto"
+  },
+  dialogTitle: {
+    fontSize: 30,
+    textAlign: 'center'
+  }
 });
 export function SaveComponent({currentDeck, decks, deckName, setDeckName}) {
   const classes = useStyles();
@@ -47,7 +77,7 @@ export function SaveComponent({currentDeck, decks, deckName, setDeckName}) {
       <Button variant="outlined" color="primary" onClick={handleClickOpen} className={classes.saveButton}>
         Save Deck
       </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" PaperProps ={{classes: {root: classes.paper}}}>
         <DialogTitle id="form-dialog-title">Save Deck</DialogTitle>
         <DialogContent>
           <DialogContentText>

@@ -5,6 +5,7 @@ import MtgCards from "../SearchComponent/Cards";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import { InputBase } from "@material-ui/core";
+const ReactDOM = require('react-dom')
 
 const useStyles = makeStyles((theme) => ({
   cardsCard: {
@@ -47,6 +48,7 @@ function handleValueChange(e, setSearch, setSubscription) {
 
 export function SearchArea({ cards, addCard, currentDeck, setCurrentDeck, search, setSearch, subscription, setSubscription }) {
   const classes = useStyles();
+  const [ focused, setFocused ] = useState(false)
   return(
       <div>
         <Card className={classes.cardsCard}>
@@ -71,6 +73,7 @@ export function SearchArea({ cards, addCard, currentDeck, setCurrentDeck, search
             addCard={addCard}
             setCurrentDeck={setCurrentDeck}
             currentDeck={currentDeck}
+            search={search}
           />
         </Card>
       </div>
@@ -78,7 +81,9 @@ export function SearchArea({ cards, addCard, currentDeck, setCurrentDeck, search
 }
 
 export default withTracker(props => {
-  return {
-    cards: Cards.find({name: {$regex: new RegExp(props.search, "i") }}, {limit: 20}).fetch(),
-  };
+  if (props.search != '') {
+    return {
+      cards: Cards.find({name: {$regex: new RegExp(props.search, "i") }}, {limit: 20}).fetch(),
+    };
+  }
 })(SearchArea);

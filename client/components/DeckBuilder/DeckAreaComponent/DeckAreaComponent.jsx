@@ -40,9 +40,9 @@ export default ({currentDeck, removeCard, setCurrentDeck}) => {
       />
       <div>
         {
-        currentDeck.map(card => (
+        currentDeck.map((card, i)=> (
         card.name.toLowerCase().includes(search)  
-        ? <MtgCard card={card} removeCard={removeCard} setCurrentDeck={setCurrentDeck} currentDeck={currentDeck}/>
+        ? <MtgCard card={card} removeCard={removeCard} setCurrentDeck={setCurrentDeck} currentDeck={currentDeck} key={i}/>
         : null
         ))
         }

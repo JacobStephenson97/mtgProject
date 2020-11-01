@@ -31,10 +31,10 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "reactjs-popup": "^2.0.4",
-    "underscore": "^1.11.0",
     "three": "^0.122.0",
     "three-obj-mtl-loader": "^1.0.3",
-    "three-orbitcontrols": "^2.110.3"
+    "three-orbitcontrols": "^2.110.3",
+    "underscore": "^1.11.0"
   },
   "meteor": {
     "mainModule": {

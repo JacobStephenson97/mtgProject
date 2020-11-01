@@ -35,14 +35,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default ({ cards, addCard, setCurrentDeck, currentDeck }) => {
   const classes = useStyles();
-  return (
-    <div className={classes.cardsContainer}>
-      {
-      cards.map(card => (
-          card.count = 0,
-          <MtgCard card={card} addCard={addCard} setCurrentDeck={setCurrentDeck} currentDeck={currentDeck}/> 
-      ))
-      }
-    </div>
-  )
+  if (cards) {
+    return (
+      <div className={classes.cardsContainer}>
+        {
+        cards.map((card, i) => (
+            card.count = 0,
+            <MtgCard card={card} addCard={addCard} setCurrentDeck={setCurrentDeck} currentDeck={currentDeck} key={i}/> 
+        ))
+        }
+      </div>
+    )
+  }
+  else return <div></div>
 }

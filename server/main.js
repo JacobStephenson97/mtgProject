@@ -1,7 +1,7 @@
 import { Meteor } from "meteor/meteor";
 import { Cards, Decks } from "../both/collections";
 import mtg from "mtgsdk";
-import "./loadImage.js"
+import "./loadImage.js";
 
 const bound = Meteor.bindEnvironment((cb) => cb());
 const limit = [{ limit: 20 }, { limit: 1 }];
@@ -10,8 +10,6 @@ const search = (search) => Cards.find(queryFrom(search), limit[0]);
 
 Meteor.publish("cardSearch", search);
 Meteor.publish("cardSearchTwo", function (cardName) {
-  console.log(cardName);
-  console.log(Cards.find({ name: { $in: cardName } }).count());
   return Cards.find({ name: { $in: cardName } });
 });
 Meteor.publish("decks", function (userId) {
