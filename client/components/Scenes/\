@@ -24,19 +24,20 @@ export default class ThreeScene extends Component {
   }
 
   setupEnvironment() {
-    const { mount } = this;
-    const { clientWidth: width, clientHeight: height } = mount;
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     this.camera.position.z = 8;
     this.camera.position.y = 5;
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    //Camera Controls
+    const controls = new OrbitControls(this.camera, this.renderer.domElement);
+    //LIGHTS
     this.lights = [];
     this.lights[0] = new THREE.AmbientLight(0xFFFFFF, 1);
     this.lights[1] = new THREE.DirectionalLight(0xFFFFFF, 1);
     this.lights[0].position.set(0, 0, -10);
     this.lights[1].position.set(0, 0, -10);
     this.lights[1].target.position.set(0, 0, 0);
-    this.lights.map(l => this.scene.add(l))
+    this.scene.add(lights[0]);
+    this.scene.add(lights[1]);
   }
 
   addModels() {
