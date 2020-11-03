@@ -120,9 +120,6 @@ function importDeckFinal(deck, setCurrentDeck, countObj) {
   });
   setCurrentDeck(newDeck);
 }
-function loadDeck(deck, setCurrentDeck) {
-  setCurrentDeck(deck);
-}
 function removeCard(cardObject, setCurrentDeck, currentDeck) {
   let index = currentDeck
     .map(function (card) {
@@ -204,7 +201,6 @@ export function DeckBuilder(props) {
           />
           <LoadComponent
             setCurrentDeck={setCurrentDeck}
-            loadDeck={loadDeck}
             deckName={deckName}
             setDeckName={setDeckName}
           />

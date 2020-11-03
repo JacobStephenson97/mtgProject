@@ -53,6 +53,11 @@ const useStyles = makeStyles({
     textAlign: 'center'
   }
 });
+
+function loadDeck(deck, setCurrentDeck) {
+  setCurrentDeck(deck);
+}
+
 function DeleteConfirm(props) {
   const classes = useStyles()
   const { onClose, selectedValue, open, deckId, setOpenTwo, deckTarget, setOpen} = props;
@@ -81,14 +86,16 @@ function DeleteConfirm(props) {
 }
 function SimpleDialog(props) {
   const classes = useStyles();
-  const { onClose, selectedValue, open, decks, setCurrentDeck, loadDeck, setDeckName, setDeckTarget, setOpen, setOpenTwo} = props;
+  const { onClose, selectedValue, open, decks, setCurrentDeck, setDeckName, setDeckTarget, setOpen, setOpenTwo} = props;
   const handleClose = () => {
     onClose(selectedValue);
   };
 
   const handleListItemClick = (chosenDeck) => {
     loadDeck(chosenDeck.deck, setCurrentDeck)
-    setDeckName(chosenDeck.name)
+    if (setDeckName) {
+      setDeckName(chosenDeck.name)
+    }
     onClose();
   };
 
@@ -116,7 +123,7 @@ function SimpleDialog(props) {
   );
 }
 
-export function LoadComponent({ decks, setCurrentDeck, loadDeck, deckName, setDeckName }) {
+export function LoadComponent({ decks, setCurrentDeck, deckName, setDeckName }) {
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [openTwo, setOpenTwo] = React.useState(false);
@@ -125,7 +132,6 @@ export function LoadComponent({ decks, setCurrentDeck, loadDeck, deckName, setDe
   const handleClickOpen = () => {
     setOpen(true);
   };
-  console.log(openTwo)
   const handleClose = (value) => {
     setOpen(false);
     setSelectedValue(value);
@@ -136,7 +142,7 @@ export function LoadComponent({ decks, setCurrentDeck, loadDeck, deckName, setDe
       <Button variant="outlined" color="primary" onClick={handleClickOpen} className={classes.loadButton}>
         Load Deck
       </Button>
-      <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} decks={decks} setCurrentDeck={setCurrentDeck} loadDeck={loadDeck} deckName={deckName} setDeckName={setDeckName} openTwo={openTwo} setOpenTwo={setOpenTwo} setDeckTarget={setDeckTarget} setOpen={setOpen}/>
+      <SimpleDialog selectedValue={selectedValue} open={open} onClose={handleClose} decks={decks} setCurrentDeck={setCurrentDeck} deckName={deckName} setDeckName={setDeckName} openTwo={openTwo} setOpenTwo={setOpenTwo} setDeckTarget={setDeckTarget} setOpen={setOpen}/>
       <DeleteConfirm selectedValue={selectedValue} open={openTwo} onClose={handleClose} setOpenTwo={setOpenTwo} deckTarget={deckTarget} setOpen={setOpen}/>
     </div>
   );

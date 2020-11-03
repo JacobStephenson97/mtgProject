@@ -16,13 +16,8 @@ import Container from '@material-ui/core/Container';
 import TabPanel from './TabPanel';
 import useStyles from './styles';
 import Scene from "../Scenes/test";
+import PlayComponent from '../Play/PlayComponent'
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
 
 export const ButtonAppBar = (props)=> {
   const classes = useStyles();
@@ -36,7 +31,8 @@ export const ButtonAppBar = (props)=> {
         <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" className={classes.tabBar}>
           <Tab label="Home" id="simple-tab-0" className={classes.tabs}/>
           <Tab label="Decks" id="simple-tab-1"  className={classes.tabs}/>
-          {!user ? <Tab label="Login" color="inherit" className={classes.loginLogoutButton}  id="simple-tab-2" /> : undefined }
+          <Tab label="Play" id="simple-tab-2"  className={classes.tabs}/>
+          {!user ? <Tab label="Login" color="inherit" className={classes.loginLogoutButton}  id="simple-tab-3" /> : undefined }
         </Tabs>
         {user ? <Button className={classes.LogoutButton} color="inherit" onClick={() => {Meteor.logout(); setValue(2)}} >Logout</Button> : undefined}
       </AppBar>
@@ -47,6 +43,9 @@ export const ButtonAppBar = (props)=> {
         <DeckBuilder />
       </TabPanel>
       <TabPanel value={value} index={2}>
+       <PlayComponent />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
         {!user && <Register setTab={tabNumber => setValue(tabNumber)}/>}
       </TabPanel>
     </div>
