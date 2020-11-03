@@ -9,6 +9,8 @@ const useStyles = makeStyles((theme) => ({
     overflowY: 'auto',
     direction: 'horizontal',
     width: '100%',
+    float: 'left',
+    clear: 'none'
   },
   '@global': {
     '*::-webkit-scrollbar': {

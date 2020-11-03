@@ -10,13 +10,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default ({ currentHand }) => {
+export default ({ currentHand, setPlayerOneBattlefield, addToBattlefield, setCurrentHand }) => {
   const classes = useStyles();
   return (
     <div className={classes.handArea}>
       {
         currentHand.map((card, i)=> (
-        <MtgCard card={card} key={i}/>
+        <MtgCard card={card} key={i} setPlayerOneBattlefield={setPlayerOneBattlefield} addToBattlefield={addToBattlefield} setCurrentHand={setCurrentHand} currentHand={currentHand}/>
         ))
       }
     </div>
