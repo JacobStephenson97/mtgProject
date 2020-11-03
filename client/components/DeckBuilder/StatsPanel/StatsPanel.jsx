@@ -55,8 +55,6 @@ export default ({currentDeck, toggleGraph}) => {
       <div className={classes.text}>
         <h1 className={classes.deckSize}>Deck Size: {currentDeck.length}</h1>
         <h1 className={classes.deckSize}>Lands: {countLands(currentDeck)}</h1>
-        <p>Red: {countRedLands(currentDeck)}</p>
-        <p>Total Red Cost: {countColorTotalCost(currentDeck)}</p>
       </div>
       :<div className={classes.graphsContainer}>
         <MyChart redCount={countColorTotalCost(currentDeck, 'R')} blueCount={countColorTotalCost(currentDeck, 'U')} greenCount={countColorTotalCost(currentDeck, 'G')} blackCount={countColorTotalCost(currentDeck, 'B')} whiteCount={countColorTotalCost(currentDeck, 'W')}/>
