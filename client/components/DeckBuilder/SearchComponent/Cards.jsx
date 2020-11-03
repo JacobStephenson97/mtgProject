@@ -10,15 +10,10 @@ const useStyles = makeStyles((theme) => ({
     direction: 'horizontal',
     width: '100%',
   },
-  test: {
-    position: 'absolute',
-    width: window.innerWidth - 100,
-    overflowX: 'auto',
-    width: '96%'
-  },
   '@global': {
     '*::-webkit-scrollbar': {
       width: 6,
+      width: 2,
       backgroundColor: 'transparent'
     },
     '*::-webkit-scrollbar-track': {
