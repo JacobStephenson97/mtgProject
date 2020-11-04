@@ -67,8 +67,8 @@ function drawCard(currentDeck, setCurrentHand, setCurrentDeck) {
 }
 
 function addToBattlefield(setPlayerBattlefield, card, setCurrentHand, currentHand) {
-  setPlayerBattlefield((oldBattlefield) => [...oldBattlefield, card]);
-  setCurrentHand(currentHand.filter(handCard => handCard != card))
+    setPlayerBattlefield((oldBattlefield) => [...oldBattlefield, card]);
+    setCurrentHand(currentHand.filter(handCard => handCard != card))
 }
 
 export default (props) => {
@@ -76,13 +76,14 @@ export default (props) => {
   const [currentDeck, setCurrentDeck] = useState([]);
   const [currentHand, setCurrentHand] = useState(null);
   const [playerOneBattlefield, setPlayerOneBattlefield] = useState([])
-  const [manaPool, setManaPool] = useState([0,0,0,0,0,0,0])
+  let manaPool = [0,0,2,0,0,0,0]
 
   if (!currentHand && currentDeck.length > 1) {
     shuffle(currentDeck, setCurrentDeck)
     setCurrentHand(currentDeck.slice(0,7))
     setCurrentDeck(currentDeck.slice(7))
   } 
+
   const onWheel = e => {
     e.preventDefault();
     const container = document.getElementById("handArea");
@@ -93,17 +94,6 @@ export default (props) => {
       behaviour: "smooth"
     });
   };
-
-  function setManaPoolFunc(manaCount) {
-    let newArr = [...manaPool]
-    for (let i = 0; i < manaCount.length; i++) {
-      if (newArr[6] < 0) {
-      newArr[6] = newArr[6] + manaCount[i]
-      } else newArr[i] = newArr[i] + manaCount[i]
-    }
-    setManaPool(newArr)
-  }
-  console.log(manaPool)
   return (
     <div>
       <div className={classes.handContainer}>
@@ -119,9 +109,10 @@ export default (props) => {
         }
       </div>
       <div className={classes.bfContainer}>
-       <BattlefieldComponent playerOneBattlefield={playerOneBattlefield} setManaPoolFunc={setManaPoolFunc} manaPool={manaPool}/>
+       <BattlefieldComponent playerOneBattlefield={playerOneBattlefield}/>
       </div>
-      <ManaPips manaPool={manaPool} />
+      {//<ManaPips />
+      }
     </div>
   )
 }

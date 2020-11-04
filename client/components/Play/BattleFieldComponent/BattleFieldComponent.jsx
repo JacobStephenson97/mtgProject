@@ -11,13 +11,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default ({ playerOneBattlefield, setManaPoolFunc, manaPool }) => {
+export default ({ playerOneBattlefield }) => {
   const classes = useStyles();
   return (
     <div className={classes.battlfieldArea}>
       {
         playerOneBattlefield.map((card, i)=> (
-        <MtgCard card={card} key={i} battlefield={false} setManaPoolFunc={setManaPoolFunc} manaPool={manaPool}/>
+        <MtgCard card={card} key={i} battlefield={false}/>
         ))
       }
     </div>
