@@ -2,7 +2,7 @@ import { DropzoneDialog } from "material-ui-dropzone";
 import React, { useState, useEffect, useRef } from "react";
 import Button from "@material-ui/core/Button";
 import { Cards } from "../../../../both/collections";
-import { withTracker } from "meteor/react-meteor-data";
+import { useTracker } from "meteor/react-meteor-data";
 import { makeStyles } from "@material-ui/core/styles";
 import { Meteor } from 'meteor/meteor';
 import _, { map, object } from 'underscore';
@@ -61,15 +61,36 @@ function importDeck(files, setDeckLength, setCountObj) {
   };
 }
 
-export function DeckImport({importCards, setCurrentDeck, importDeckFinal, countObj, setCountObj, fullyReady}) {
+export function DeckImport({ setCurrentDeck, importDeckFinal, countObj, setCountObj, fullyReady}) {
   const classes = useStyles()
   const [open, setOpen] = useState(false);
   const [openTwo, setOpenTwo] = useState(false);
   const [deckLength, setDeckLength] = useState(0);
   const [missingCards, setMissingCards] = useState([])
   const [selectedValue, setSelectedValue] = React.useState(null);
+
+  let { importCards, isReady } = useTracker(() => {
+    const noDataAvailable = { importCards: [] }
+    let isReady = false;
+    if(!Meteor.user() || countObj == {}) {
+      return noDataAvailable
+    }
+    const handler = Meteor.subscribe('cardSearchTwo', Object.keys(countObj))
+
+    if (!handler.ready()) {
+      return { noDataAvailable, isLoading: true };
+    }
+
+    const cards = Cards.find({ name: { $in: Object.keys(countObj) } }, { sort: {name: 1}}).fetch();
+    const uniqueNames = _.uniq(cards.map(function(x) {return x.name;}), true)
+    const importCards = uniqueNames.map(name => cards.find(({ name: cName }) => cName === name))
+    if(importCards.length > 0 && deckLength > 0) {
+      isReady = true
+    }
+    return { importCards, isReady }
+  })
   let fixedDeck = importCards
-  console.log(missingCards)
+
   const openMissingCards = () => {
     setOpenTwo(true);
   };
@@ -78,27 +99,32 @@ export function DeckImport({importCards, setCurrentDeck, importDeckFinal, countO
     setSelectedValue(value);
   };
   useEffect(() => {
-    if (importCards.length < deckLength && fullyReady) {
-      fixedDeck = []
-      Object.keys(countObj).forEach(card => {
-        if (!importCards.some(e => e.name === card)) setMissingCards((missingCards) => [...missingCards, card])
-      }) 
-      fixedDeck = importCards.filter(card => !missingCards.includes(card.name))
-      importDeckFinal(fixedDeck, setCurrentDeck, countObj) 
-      setDeckLength(0) 
-      setCountObj({})
-      openMissingCards()
-    }
-    if ((importCards.length > deckLength || importCards.length === deckLength)  && fullyReady) {
-      fixedDeck = []
-      importCards.forEach(card => {
-        if (card.name in countObj) fixedDeck.push(card)
-      })
-      importDeckFinal(fixedDeck, setCurrentDeck, countObj) 
-      setDeckLength(0) 
-      setCountObj({})
+    if(importCards) {
+      if (importCards.length < deckLength && isReady) {
+        fixedDeck = []
+        Object.keys(countObj).forEach(card => {
+          if (!importCards.some(e => e.name === card)) setMissingCards((missingCards) => [...missingCards, card])
+        }) 
+        fixedDeck = importCards.filter(card => !missingCards.includes(card.name))
+        importDeckFinal(fixedDeck, setCurrentDeck, countObj) 
+        setDeckLength(0) 
+        setCountObj({})
+        openMissingCards()
+        isReady = false
+      }
+      if ((importCards.length > deckLength || importCards.length === deckLength)  && isReady) {
+        fixedDeck = []
+        importCards.forEach(card => {
+          if (card.name in countObj) fixedDeck.push(card)
+        })
+        importDeckFinal(fixedDeck, setCurrentDeck, countObj) 
+        setDeckLength(0) 
+        setCountObj({})
+        isReady = false
+      }
     }
   })
+
   return (
     <div>
       <div>
@@ -138,7 +164,7 @@ export function DeckImport({importCards, setCurrentDeck, importDeckFinal, countO
   )
 }
 
-export default withTracker(props => {
+/* export default withTracker(props => {
   const subscription = Meteor.subscribe('cardSearchTwo', Object.keys(props.countObj))
   const isReady = subscription.ready()
   let fullyReady = false
@@ -149,4 +175,4 @@ export default withTracker(props => {
     importCards: uniqueNames.map(name => cards.find(({ name: cName }) => cName === name)),
     fullyReady: fullyReady
   };
-})(DeckImport);
+})(DeckImport); */

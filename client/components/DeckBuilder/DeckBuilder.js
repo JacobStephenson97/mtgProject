@@ -9,10 +9,10 @@ import DeckAreaComponent from "./DeckAreaComponent/DeckAreaComponent";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import StatsPanel from "./StatsPanel/StatsPanel";
-import DeckImport from "./ImportDeck/ImportDeck";
-import SearchArea from "./SearchArea/SearchArea";
-import SaveComponent from "./SaveAreaComponent/SaveAreaComponent";
-import LoadComponent from "./LoadDeckComponent/LoadDeckComponent";
+import { DeckImport } from "./ImportDeck/ImportDeck";
+import { SearchArea } from "./SearchArea/SearchArea";
+import { SaveComponent } from "./SaveAreaComponent/SaveAreaComponent";
+import { LoadComponent } from "./LoadDeckComponent/LoadDeckComponent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -235,7 +235,3 @@ export function DeckBuilder(props) {
     </div>
   );
 }
-
-export default withTracker(() => {
-  return {};
-})(DeckBuilder);

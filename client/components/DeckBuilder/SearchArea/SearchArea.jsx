@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { withTracker } from "meteor/react-meteor-data";
+import { useTracker } from 'meteor/react-meteor-data';
 import { Cards } from "../../../../both/collections";
 import MtgCards from "../SearchComponent/Cards";
 import { makeStyles } from "@material-ui/core/styles";
@@ -42,13 +42,28 @@ const useStyles = makeStyles((theme) => ({
 
 function handleValueChange(e, setSearch, setSubscription) {
   setSearch(e.target.value);
-  setSubscription(Meteor.subscribe("cardSearch", e.target.value));
 }
 
 
-export function SearchArea({ cards, addCard, currentDeck, setCurrentDeck, search, setSearch, subscription, setSubscription }) {
+export function SearchArea({ addCard, currentDeck, setCurrentDeck, search, setSearch, subscription, setSubscription }) {
   const classes = useStyles();
   const [ focused, setFocused ] = useState(false)
+  
+  const { cards, isLoading } = useTracker(() => {
+    const noDataAvailable = { cards: [] }
+    if(!Meteor.user()) {
+      return noDataAvailable
+    }
+    const handler = Meteor.subscribe('cardSearch', search);
+
+    if (!handler.ready() || search == '') {
+      return { noDataAvailable, isLoading: true };
+    }
+
+    const cards = Cards.find({name: {$regex: new RegExp(search, "i") }}, {limit: 20}).fetch()
+    console.log(cards)
+    return { cards }
+  })
   return(
       <div>
         <Card className={classes.cardsCard}>
@@ -79,11 +94,3 @@ export function SearchArea({ cards, addCard, currentDeck, setCurrentDeck, search
       </div>
   )
 }
-
-export default withTracker(props => {
-  if (props.search != '') {
-    return {
-      cards: Cards.find({name: {$regex: new RegExp(props.search, "i") }}, {limit: 20}).fetch(),
-    };
-  }
-})(SearchArea);

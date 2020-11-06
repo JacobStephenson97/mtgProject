@@ -14,8 +14,8 @@ import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
 import { blue } from '@material-ui/core/colors';
 import { Meteor } from 'meteor/meteor';
-import { withTracker } from "meteor/react-meteor-data";
 import { Decks } from '../../../../both/collections'
+import { useTracker } from 'meteor/react-meteor-data';
 
 const useStyles = makeStyles({
   deckNameContainer: {
@@ -67,7 +67,7 @@ function DeleteConfirm(props) {
   };
 
   const handleDelete = (DeckId) => {
-    Decks.remove(DeckId)
+    Meteor.call('decks.remove', DeckId)
     setOpenTwo(false)
     setOpen(true)
   }
@@ -109,7 +109,10 @@ function SimpleDialog(props) {
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open} PaperProps ={{classes: {root: classes.paper}}}>
       <DialogTitle disableTypography id="simple-dialog-title" className={classes.dialogTitle}>Pick a Deck</DialogTitle>
       <List>
-       {decks.map((deck, i) => (
+        {
+        decks
+        ?
+        decks.map((deck, i) => (
          <div className={classes.deckNameContainer} key={i}>
           <ListItem button onClick={() => handleListItemClick(deck)} key={deck.name} className={classes.deckButtonContainer}>
             <ListItemText disableTypography primary={deck.name} className={classes.deckButton}/>
@@ -117,13 +120,14 @@ function SimpleDialog(props) {
           <Button className={classes.removeButton} onClick={() => handleClickOpenTwo(deck)} >Delete</Button>
           </div>
         ))
+        : <h1>Loading</h1>
         }
       </List>
     </Dialog>
   );
 }
 
-export function LoadComponent({ decks, setCurrentDeck, deckName, setDeckName }) {
+export const LoadComponent = ({ setCurrentDeck, deckName, setDeckName }) => {
   const [open, setOpen] = React.useState(false);
   const [selectedValue, setSelectedValue] = React.useState(null);
   const [openTwo, setOpenTwo] = React.useState(false);
@@ -137,6 +141,22 @@ export function LoadComponent({ decks, setCurrentDeck, deckName, setDeckName }) 
     setSelectedValue(value);
   };
 
+  const { decks, isLoading } = useTracker(() => {
+    const noDataAvailable = { decks: [] }
+    if(!Meteor.user()) {
+      return noDataAvailable
+    }
+    const handler = Meteor.subscribe('decks', Meteor.userId());
+
+    if (!handler.ready()) {
+      return { noDataAvailable, isLoading: true };
+    }
+
+    const decks = Decks.find().fetch()
+
+    return { decks }
+  })
+
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen} className={classes.loadButton}>
@@ -147,10 +167,3 @@ export function LoadComponent({ decks, setCurrentDeck, deckName, setDeckName }) 
     </div>
   );
 }
-
-export default withTracker(() => {
-  Meteor.subscribe('decks', Meteor.userId())
-  return {
-    decks: Decks.find().fetch()
-  };
-})(LoadComponent);

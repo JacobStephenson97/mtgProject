@@ -2,6 +2,7 @@ import { Meteor } from "meteor/meteor";
 import { Cards, Decks } from "../both/collections";
 import mtg from "mtgsdk";
 import "./loadImage.js";
+import "../both/decksMethods";
 
 const bound = Meteor.bindEnvironment((cb) => cb());
 const limit = [{ limit: 20 }, { limit: 1 }];
