@@ -4,6 +4,9 @@ import MtgCard from '../SearchComponent/Card'
 import { card } from 'mtgsdk';
 import Card from "@material-ui/core/Card";
 import { InputBase } from "@material-ui/core";
+import {DragDropContext } from 'react-beautiful-dnd'
+
+import DeckHeading from './DeckHeadingComponent/DeckHeadingComponent'
 
 const useStyles = makeStyles((theme) => ({
   inputBase: {
@@ -15,6 +18,21 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 20,
     color: "#C8C8C8",
   },
+  test: {
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: 187
+  },
+  test2: {
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  typeHeader: {
+    fontSize: 20,
+    fontFamily: "Roboto",
+    textAlign: 'center',
+    margin: 0
+  }
 }));
 function handleValueChange(e, setSearch) {
     setSearch(e.target.value);
@@ -23,9 +41,16 @@ function handleValueChange(e, setSearch) {
 export default ({currentDeck, removeCard, setCurrentDeck}) => {
   const classes = useStyles();
   const [search, setSearch] = useState('');
+  //OPTION FOR HOVER DELAY, SET UP LATER
+  const [hoverDelay, setHoverDelay] = useState(0)
+  let newArr = currentDeck.filter(card => card.type.includes('Creature'))
+  let newArr2 = currentDeck.filter(card => card.type.includes('Instant'))
+  const [subDecks, setSubDecks] = useState([])
+  subDecks.Creature = newArr
+  subDecks.Instant = newArr2
 
   return (
-    <div >
+    <div>
       <InputBase
         type="search"
         id="outlined-full-width"
@@ -38,15 +63,11 @@ export default ({currentDeck, removeCard, setCurrentDeck}) => {
           handleValueChange(e, setSearch);
         }}
       />
-      <div>
-        {
-        currentDeck.map((card, i)=> (
-        card.name.toLowerCase().includes(search)  
-        ? <MtgCard card={card} removeCard={removeCard} setCurrentDeck={setCurrentDeck} currentDeck={currentDeck} key={i}/>
-        : null
-        ))
-        }
-      </div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className={classes.test2}>
+          <DeckHeading subDecks={subDecks} setCurrentDeck={setCurrentDeck} removeCard={removeCard} search={search} hoverDelay={hoverDelay} currentDeck={currentDeck}/>
+        </div>
+      </DragDropContext>
     </div>
     )
 }

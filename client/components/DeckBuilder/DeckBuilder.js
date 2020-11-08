@@ -13,6 +13,7 @@ import { DeckImport } from "./ImportDeck/ImportDeck";
 import { SearchArea } from "./SearchArea/SearchArea";
 import { SaveComponent } from "./SaveAreaComponent/SaveAreaComponent";
 import { LoadComponent } from "./LoadDeckComponent/LoadDeckComponent";
+import { Collapse } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     left: "1%",
     backgroundColor: "rgba(72,72,72,0.7)",
     width: "41%",
-    height: "6%",
+    height: "100%",
     top: "8%",
     paddingLeft: 10,
     paddingRight: 4,
@@ -35,7 +36,6 @@ const useStyles = makeStyles((theme) => ({
     width: "41%",
     height: "30%",
     left: "1%",
-    top: "15%",
     paddingLeft: 10,
     paddingTop: 10,
     paddingBottom: 10,
@@ -50,12 +50,11 @@ const useStyles = makeStyles((theme) => ({
     color: "#C8C8C8",
   },
   deckArea: {
-    display: "flex",
-    position: "absolute",
-    bottom: 20,
+    position: "relative",
     left: "1%",
     width: "98%",
-    height: "45%",
+    flex: "1 0.001 auto",
+    transition: "all 2s;",
   },
 
   deckCard: {
@@ -64,14 +63,12 @@ const useStyles = makeStyles((theme) => ({
     height: "95%",
     width: "99%",
     overflowY: "auto",
+    position: "absolute",
   },
   deckSortButtons: {
-    position: "absolute",
-    bottom: "48%",
+    position: "relative",
     left: "1%",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: "inline",
   },
   sortButtons: {
     color: "#C8C8C8",
@@ -104,8 +101,17 @@ const useStyles = makeStyles((theme) => ({
   },
   deckButtons: {
     position: "absolute",
-    bottom: "48%",
+    display: "inline",
     right: "1%",
+  },
+  bigContainer: {
+    position: "absolute",
+    left: 10,
+    top: "10%",
+    width: "99%",
+    height: "85%",
+    display: "flex",
+    flexDirection: "column",
   },
 }));
 
@@ -133,9 +139,12 @@ function sortByName(currentDeck, setCurrentDeck) {
   currentDeck.sort((a, b) => (a.name > b.name ? 1 : -1));
   setCurrentDeck([...currentDeck]);
 }
-function sortByCMC(currentDeck, setCurrentDeck) {
-  currentDeck.sort((a, b) => (a.cmc > b.cmc ? 1 : -1));
+function sortByCMC(currentDeck, setCurrentDeck, cmcSortOrder, setCmcSortOrder) {
+  if (cmcSortOrder == true)
+    currentDeck.sort((a, b) => (a.cmc > b.cmc ? 1 : -1));
+  else currentDeck.sort((a, b) => (a.cmc < b.cmc ? 1 : -1));
   setCurrentDeck([...currentDeck]);
+  setCmcSortOrder(!cmcSortOrder);
 }
 function sortByType(currentDeck, setCurrentDeck) {
   currentDeck.sort((a, b) => (a.types > b.types ? 1 : -1));
@@ -143,15 +152,23 @@ function sortByType(currentDeck, setCurrentDeck) {
 }
 
 export function DeckBuilder(props) {
-  const classes = useStyles();
   const [currentDeck, setCurrentDeck] = useState([]);
   const [toggleGraph, setToggleGraph] = useState([false]);
   const [search, setSearch] = useState("");
   const [subscription, setSubscription] = useState(null);
   const [deckName, setDeckName] = React.useState("");
   const [countObj, setCountObj] = React.useState({});
+  const [collapseSearch, setCollapseSearch] = useState(false);
+  const [collapseStats, setCollapseStats] = useState(true);
+  const [cmcSortOrder, setCmcSortOrder] = useState(null);
+  const classes = useStyles();
+
+  function handleCollapse() {
+    setCollapseSearch(!collapseSearch);
+  }
+
   return (
-    <div>
+    <div className={classes.bigContainer}>
       <SearchArea
         addCard={addCard}
         currentDeck={currentDeck}
@@ -160,25 +177,83 @@ export function DeckBuilder(props) {
         setSearch={setSearch}
         subscription={subscription}
         setSubscription={setSubscription}
+        collapseSearch={collapseSearch}
       />
-      <div className={classes.deckSortButtons}>
-        <ButtonGroup color="primary" aria-label="outlined primary button group">
-          <Button
-            className={classes.sortButtons}
-            onClick={(e) => sortByName(currentDeck, setCurrentDeck)}>
-            Name
-          </Button>
-          <Button
-            className={classes.sortButtons}
-            onClick={(e) => sortByCMC(currentDeck, setCurrentDeck)}>
-            CMC
-          </Button>
-          <Button
-            className={classes.sortButtons}
-            onClick={(e) => sortByType(currentDeck, setCurrentDeck)}>
-            Type
-          </Button>
-        </ButtonGroup>
+      <div>
+        <div className={classes.deckSortButtons}>
+          <ButtonGroup
+            color="primary"
+            aria-label="outlined primary button group">
+            <Button
+              className={classes.sortButtons}
+              onClick={(e) => sortByName(currentDeck, setCurrentDeck)}>
+              Name
+            </Button>
+            <Button
+              className={classes.sortButtons}
+              onClick={(e) =>
+                sortByCMC(
+                  currentDeck,
+                  setCurrentDeck,
+                  cmcSortOrder,
+                  setCmcSortOrder
+                )
+              }>
+              CMC{" "}
+              {cmcSortOrder !== null ? (cmcSortOrder == false ? "⇧" : "⇩") : ""}
+            </Button>
+            <Button
+              className={classes.sortButtons}
+              onClick={(e) => sortByType(currentDeck, setCurrentDeck)}>
+              Type
+            </Button>
+            <Button
+              className={classes.sortButtons}
+              onClick={() => handleCollapse()}>
+              Toggle Search
+            </Button>
+          </ButtonGroup>
+        </div>
+        <div className={classes.deckButtons}>
+          <ButtonGroup>
+            <SaveComponent
+              currentDeck={currentDeck}
+              deckName={deckName}
+              setDeckName={setDeckName}
+            />
+            <LoadComponent
+              setCurrentDeck={setCurrentDeck}
+              deckName={deckName}
+              setDeckName={setDeckName}
+            />
+            {toggleGraph ? (
+              <Button
+                className={classes.toggleGraphButton}
+                variant="outlined"
+                color="primary"
+                onClick={() => setToggleGraph((toggleGraph) => !toggleGraph)}>
+                Show Graphs
+              </Button>
+            ) : (
+              <Button
+                className={classes.toggleGraphButton}
+                variant="outlined"
+                color="primary"
+                onClick={() => setToggleGraph((toggleGraph) => !toggleGraph)}>
+                Show Stats
+              </Button>
+            )}
+            <DeckImport
+              currentDeck={currentDeck}
+              setCurrentDeck={setCurrentDeck}
+              importDeckFinal={importDeckFinal}
+              search={search}
+              setSearch={setSearch}
+              countObj={countObj}
+              setCountObj={setCountObj}
+            />
+          </ButtonGroup>
+        </div>
       </div>
       <div className={classes.deckArea}>
         <Card className={classes.deckCard}>
@@ -189,49 +264,11 @@ export function DeckBuilder(props) {
           />
         </Card>
       </div>
-      <Card className={classes.statsArea}>
-        <StatsPanel currentDeck={currentDeck} toggleGraph={toggleGraph} />
-      </Card>
-      <div className={classes.deckButtons}>
-        <ButtonGroup>
-          <SaveComponent
-            currentDeck={currentDeck}
-            deckName={deckName}
-            setDeckName={setDeckName}
-          />
-          <LoadComponent
-            setCurrentDeck={setCurrentDeck}
-            deckName={deckName}
-            setDeckName={setDeckName}
-          />
-          {toggleGraph ? (
-            <Button
-              className={classes.toggleGraphButton}
-              variant="outlined"
-              color="primary"
-              onClick={() => setToggleGraph((toggleGraph) => !toggleGraph)}>
-              Show Graphs
-            </Button>
-          ) : (
-            <Button
-              className={classes.toggleGraphButton}
-              variant="outlined"
-              color="primary"
-              onClick={() => setToggleGraph((toggleGraph) => !toggleGraph)}>
-              Show Stats
-            </Button>
-          )}
-          <DeckImport
-            currentDeck={currentDeck}
-            setCurrentDeck={setCurrentDeck}
-            importDeckFinal={importDeckFinal}
-            search={search}
-            setSearch={setSearch}
-            countObj={countObj}
-            setCountObj={setCountObj}
-          />
-        </ButtonGroup>
-      </div>
+      {!collapseStats ? (
+        <Card className={classes.statsArea}>
+          <StatsPanel currentDeck={currentDeck} toggleGraph={toggleGraph} />
+        </Card>
+      ) : null}
     </div>
   );
 }
