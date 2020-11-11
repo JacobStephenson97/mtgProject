@@ -37,7 +37,7 @@ export const ButtonAppBar = (props)=> {
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
-        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" className={classes.tabBar}>
+        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" className={classes.tabBar} TabIndicatorProps={{style: {backgroundColor: "white"}}}>
           <Tab label="Home" id="simple-tab-0" className={classes.tabs}/>
           <Tab label="Decks" id="simple-tab-1"  className={classes.tabs}/>
           <Tab label="Play" id="simple-tab-2"  className={classes.tabs}/>
@@ -50,9 +50,6 @@ export const ButtonAppBar = (props)=> {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <DeckBuilder />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-       <PlayComponent />
       </TabPanel>
       <TabPanel value={value} index={3}>
         {!user && <Register setTab={tabNumber => setValue(tabNumber)}/>}

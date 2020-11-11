@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles((theme) => ({
   root: {
@@ -11,28 +11,28 @@ export default makeStyles((theme) => ({
     flexGrow: 1,
   },
   appBar: {
-    position: 'absolute',
-    backgroundColor: 'rgba(21, 11, 1)',
-    width: '98%',
-    height: '5%'
+    position: "absolute",
+    backgroundColor: "rgba(32,32,32,0.9)",
+    width: "98%",
+    height: "5%",
   },
   loginLogoutButton: {
-    position: 'absolute',
+    position: "absolute",
     right: 0,
-    fontSize: 20
+    fontSize: 20,
   },
   LogoutButton: {
-    position: 'absolute',
-    top: 6,
+    position: "absolute",
+    top: 2,
     right: 20,
-    color: 'rgba(220, 220, 220)',
-    fontSize: '1vw'
+    color: "rgba(220, 220, 220)",
+    fontSize: "1vw",
   },
   tabs: {
-    height: '100%',
-    fontSize: '1vw',
+    height: "100%",
+    fontSize: "1vw",
   },
   tabBar: {
-    height: '100%',
-  }
+    height: "100%",
+  },
 }));
