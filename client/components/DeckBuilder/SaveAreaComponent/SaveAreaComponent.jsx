@@ -8,8 +8,10 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Decks } from "../../../../both/collections"
 import { Meteor } from 'meteor/meteor';
-import { withTracker } from "meteor/react-meteor-data";
+import { useTracker } from 'meteor/react-meteor-data';
 import { makeStyles } from '@material-ui/core/styles';
+
+
 const useStyles = makeStyles({
   saveButton: {
     color: "#C8C8C8",
@@ -51,7 +53,7 @@ const useStyles = makeStyles({
     textAlign: 'center'
   }
 });
-export function SaveComponent({currentDeck, decks, deckName, setDeckName}) {
+export function SaveComponent({currentDeck, deckName, setDeckName}) {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
@@ -65,13 +67,30 @@ export function SaveComponent({currentDeck, decks, deckName, setDeckName}) {
   };
   const handleSave = () => {
     let Id = Decks.findOne({ name: deckName });
-    if(Id) Decks.update({ _id: Id._id}, {userID: Meteor.userId(), name: deckName, deck: currentDeck})
-    else Decks.insert({ userID: Meteor.userId(), name: deckName, deck: currentDeck})
+    if(Id) Meteor.call('decks.update', Id._id, deckName, currentDeck)
+    else Meteor.call('decks.insert', deckName, currentDeck)
     handleClose()
   } 
   const handleValueChange = (e) => {
     setDeckName(e.target.value)
   }
+
+  const { decks, isLoading } = useTracker(() => {
+    const noDataAvailable = { decks: [] }
+    if(!Meteor.user()) {
+      return noDataAvailable
+    }
+    const handler = Meteor.subscribe('decks', Meteor.userId());
+
+    if (!handler.ready()) {
+      return { noDataAvailable, isLoading: true };
+    }
+
+    const decks = Decks.find().fetch()
+
+    return { decks }
+  })
+
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen} className={classes.saveButton}>
@@ -108,10 +127,3 @@ export function SaveComponent({currentDeck, decks, deckName, setDeckName}) {
     </div>
   );
 }
-
-export default withTracker(() => {
-  Meteor.subscribe('decks', Meteor.userId())
-  return {
-    decks: Decks.find().fetch()
-  };
-})(SaveComponent);

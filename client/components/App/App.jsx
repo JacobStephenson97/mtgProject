@@ -10,8 +10,8 @@ import Box from '@material-ui/core/Box';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Register from '../Login/Login'
-import { withTracker } from 'meteor/react-meteor-data';
-import DeckBuilder from '../DeckBuilder/DeckBuilder'
+import { useTracker } from 'meteor/react-meteor-data';
+import {DeckBuilder} from '../DeckBuilder/DeckBuilder'
 import Container from '@material-ui/core/Container';
 import TabPanel from './TabPanel';
 import useStyles from './styles';
@@ -22,13 +22,22 @@ import PlayComponent from '../Play/PlayComponent'
 export const ButtonAppBar = (props)=> {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const { user } = props;
   const handleChange = (event, newValue) => setValue(newValue);
 
+  const { user, isLoading } = useTracker(() => {
+    const noDataAvailable = { decks: [] }
+    if(!Meteor.user()) {
+      return noDataAvailable
+    }
+
+    const user = Meteor.user();
+
+    return { user }
+  })
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
-        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" className={classes.tabBar}>
+        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" className={classes.tabBar} TabIndicatorProps={{style: {backgroundColor: "white"}}}>
           <Tab label="Home" id="simple-tab-0" className={classes.tabs}/>
           <Tab label="Decks" id="simple-tab-1"  className={classes.tabs}/>
           <Tab label="Play" id="simple-tab-2"  className={classes.tabs}/>
@@ -42,19 +51,9 @@ export const ButtonAppBar = (props)=> {
       <TabPanel value={value} index={1}>
         <DeckBuilder />
       </TabPanel>
-      <TabPanel value={value} index={2}>
-       <PlayComponent />
-      </TabPanel>
       <TabPanel value={value} index={3}>
         {!user && <Register setTab={tabNumber => setValue(tabNumber)}/>}
       </TabPanel>
     </div>
   );
 }
-
-export default NavBarContainer = withTracker((props) => {
-  const sub = Meteor.user();
-    return {
-      user: Meteor.user()
-    }
-})(ButtonAppBar);
