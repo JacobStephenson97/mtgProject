@@ -19,14 +19,14 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 20,
     color: "#C8C8C8",
   },
-  test: {
-    display: "flex",
-    flexDirection: "column",
-    maxWidth: 187,
-  },
-  test2: {
+  deckCardsContainer: {
     display: "flex",
     justifyContent: "space-between",
+    overflowY: "auto",
+    overflowX: "hidden",
+    height: "98%",
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   typeHeader: {
     fontSize: 20,
@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
     padding: 10,
     height: "95%",
     width: "99%",
-    overflowY: "auto",
     position: "absolute",
   },
 }));
@@ -76,32 +75,36 @@ export default ({
     setSubDecks(items);
     mergeCards();
   };
-  let sortedArray = [];
-  currentDeck.forEach((card) => {
-    if (!sortedArray.includes(card.types[card.types.length - 1]))
-      sortedArray.push(card.types[card.types.length - 1]);
-  });
-  sortedArray.map((type, i) => {
-    sortedArray[i] = currentDeck.filter(
-      (card) => card.types[card.types.length - 1] === type
-    );
-    let cardCount = [];
-    sortedArray[i].forEach((card) => {
-      if (!Object.keys(cardCount.includes(card.name))) {
-        cardCount[card.name] = 1;
-      } else cardCount[card.name] = (cardCount[card.name] ?? 0) + 1;
+  sortCards = () => {
+    let sortedArray = [];
+    let deck = currentDeck;
+    deck.forEach((card) => {
+      if (!sortedArray.includes(card.types[card.types.length - 1]))
+        sortedArray.push(card.types[card.types.length - 1]);
     });
-    sortedArray[i] = Array.from(new Set(sortedArray[i].map((a) => a.id))).map(
-      (id) => {
-        return sortedArray[i].find((a) => a.id === id);
-      }
-    );
-    sortedArray[i].forEach((card) => {
-      if (Object.keys(cardCount).includes(card.name))
-        card["count"] = cardCount[card.name];
+    sortedArray.map((type, i) => {
+      sortedArray[i] = deck.filter(
+        (card) => card.types[card.types.length - 1] === type
+      );
+      let cardCount = [];
+      sortedArray[i].forEach((card) => {
+        if (!Object.keys(cardCount.includes(card.name))) {
+          cardCount[card.name] = 1;
+        } else cardCount[card.name] = (cardCount[card.name] ?? 0) + 1;
+      });
+      sortedArray[i] = Array.from(new Set(sortedArray[i].map((a) => a.id))).map(
+        (id) => {
+          return sortedArray[i].find((a) => a.id === id);
+        }
+      );
+      sortedArray[i].forEach((card) => {
+        if (Object.keys(cardCount).includes(card.name))
+          card["count"] = cardCount[card.name];
+      });
+      sortedArray[i].unshift(type);
     });
-    sortedArray[i].unshift(type);
-  });
+    setSubDecks(sortedArray);
+  };
 
   mergeCards = () => {
     let merged = [].concat.apply([], subDecks);
@@ -116,6 +119,10 @@ export default ({
   createNewSubDeck = (deckArray) => {
     setSubDecks((oldDecks) => [...oldDecks, deckArray]);
   };
+
+  useEffect(() => {
+    sortCards();
+  }, [currentDeck]);
   return (
     <div>
       <DeckButtons
@@ -140,19 +147,17 @@ export default ({
           }}
         />
         <DragDropContext onDragEnd={onDragEnd}>
-          <div className={classes.test2}>
+          <div className={classes.deckCardsContainer}>
             <DeckHeading
               subDecks={subDecks}
               setCurrentDeck={setCurrentDeck}
               removeCard={removeCard}
               search={search}
               hoverDelay={hoverDelay}
-              currentDeck={subDecks}
+              currentDeck={currentDeck}
             />
           </div>
         </DragDropContext>
-        <button onClick={() => setSubDecks(sortedArray)}>TEST STATE</button>
-        <button onClick={() => createNewSubDeck([])}>TEST STATE</button>
       </Card>
     </div>
   );

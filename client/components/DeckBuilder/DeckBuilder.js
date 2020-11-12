@@ -58,7 +58,6 @@ const useStyles = makeStyles((theme) => ({
     padding: 10,
     height: "95%",
     width: "99%",
-    overflowY: "auto",
     position: "absolute",
   },
   deckSortButtons: {

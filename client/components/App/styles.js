@@ -35,4 +35,9 @@ export default makeStyles((theme) => ({
   tabBar: {
     height: "100%",
   },
+  registerButton: {
+    position: "absolute",
+    right: 200,
+    fontSize: 20,
+  },
 }));

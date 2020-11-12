@@ -51,11 +51,14 @@ function importDeck(files, setDeckLength, setCountObj) {
   reader.onload = function () {
     let cardArray = reader.result.split("\n");
     let cardArrayFiltered = cardArray.filter(Boolean);
+
     const countObj = cardArrayFiltered.reduce((acc, next) => {
       count = next.substr(0, next.indexOf(" "));
       name = next.substr(next.indexOf(" ") + 1);
-      return { ...acc, [name]: count };
+      console.log(name);
+      return { ...acc, [name.trim()]: count };
     }, {});
+    console.log(countObj);
     setDeckLength(Object.keys(countObj).length);
     setCountObj(countObj);
   };

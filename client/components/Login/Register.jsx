@@ -25,13 +25,13 @@ const useStyles = makeStyles((theme) => ({
   registerButton: {
     marginRight: 10,
     marginTop: 10,
-    color: "rgba(21,11,0)",
-    borderColor: "rgba(21,11,0)",
+    color: "white",
+    backgroundColor: "rgba(21,11,0)",
     "&:hover": {
-      backgroundColor: "rgba(21, 11, 1)",
-      borderColor: "rgba(253, 241, 228)",
-      color: "rgba(255, 255, 255)",
+      backgroundColor: "rgba(41, 11, 1)",
     },
+    marginTop: 20,
+    left: 40,
   },
   loginTextFields: {
     marginBottom: 10,
@@ -64,31 +64,33 @@ const useStyles = makeStyles((theme) => ({
 export default ({ setTab }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
   const [hasError, setHasError] = useState(false);
   const classes = useStyles();
   const inputRef = useRef("form");
   const history = useHistory();
+
+  ValidatorForm.addValidationRule("isPasswordMatch", (value) => {
+    if (value !== password) {
+      return false;
+    }
+    return true;
+  });
   function handleValueChange(e, type) {
     const {
       target: { value },
     } = e;
     if (type === "email") setEmail(value);
     else if (type === "password") setPassword(value);
+    else if (type === "repeatPassword") setRepeatPassword(value);
   }
   function handleRegister() {
     Accounts.createUser({ email: email, password: password }, (error) => {
-      if (error) console.log(error);
-      else setTab(1);
-    });
-  }
-
-  function handleLogin() {
-    Meteor.loginWithPassword(email, password, (error) => {
       if (error) setHasError(error);
       else setTab(1);
     });
   }
-  console.log(hasError);
+
   return (
     <div className={classes.loginContainer}>
       <Card className={classes.loginCard}>
@@ -97,7 +99,7 @@ export default ({ setTab }) => {
         </div>
         <ValidatorForm
           ref={inputRef}
-          onSubmit={handleLogin}
+          onSubmit={handleRegister}
           onError={(errors) => console.log(errors)}>
           <div className="form-group">
             <TextValidator
@@ -119,10 +121,23 @@ export default ({ setTab }) => {
               value={password}
               onChange={(e) => handleValueChange(e, "password")}
               id="standard-basic"
+              name="password"
               className={classes.loginTextFields}
-              onSubmit={handleLogin}
+              onSubmit={handleRegister}
               validators={["required"]}
-              errorMessages={["this field is required"]}
+              errorMessages={["This field is required"]}
+            />
+            <TextValidator
+              type="password"
+              label="Repeat Password"
+              value={repeatPassword}
+              onChange={(e) => handleValueChange(e, "repeatPassword")}
+              id="standard-basic"
+              name="repeatPassword"
+              className={classes.loginTextFields}
+              onSubmit={handleRegister}
+              validators={["isPasswordMatch", "required"]}
+              errorMessages={["Password mismatch", "This field is required"]}
             />
           </div>
           <Button
@@ -131,13 +146,6 @@ export default ({ setTab }) => {
             color="primary"
             className={classes.registerButton}>
             Register
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.loginButton}
-            onClick={handleLogin}>
-            Login
           </Button>
         </ValidatorForm>
         <p className={classes.errorReason}>{hasError.reason}</p>

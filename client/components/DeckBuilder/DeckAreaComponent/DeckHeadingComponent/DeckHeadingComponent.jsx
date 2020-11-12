@@ -4,14 +4,11 @@ import MtgCard from "../../SearchComponent/Card";
 import { Droppable } from "react-beautiful-dnd";
 
 const useStyles = makeStyles((theme) => ({
-  test: {
+  cardContainer: {
     display: "flex",
     flexDirection: "column",
     maxWidth: 187,
-  },
-  test2: {
-    display: "flex",
-    justifyContent: "space-between",
+    paddingBottom: 260,
   },
   typeHeader: {
     fontSize: 20,
@@ -38,7 +35,7 @@ export default ({
   return subDecks.map((deck, key) => {
     let subDeckLength = deck.length - 1;
     return (
-      <div className={classes.test} key={key}>
+      <div className={classes.cardContainer} key={key}>
         <h1 className={classes.typeHeader}>
           {subDecks[key][0]} {subDeckLength}
         </h1>
@@ -49,7 +46,7 @@ export default ({
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className={classes.test}>
+              className={classes.cardContainer}>
               {subDecks[key].length > 0
                 ? deck.map((card, i) =>
                     card.name ? (
