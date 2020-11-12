@@ -29,6 +29,7 @@ export default ({
   search,
   hoverDelay,
   currentDeck,
+  imageSize,
 }) => {
   const classes = useStyles();
 
@@ -58,7 +59,9 @@ export default ({
                           currentDeck={currentDeck}
                           key={card.id + i}
                           hoverDelay={`${hoverDelay}s`}
-                          index={i}></MtgCard>
+                          index={i}
+                          imageSize={imageSize}
+                        />
                       ) : null
                     ) : null
                   )

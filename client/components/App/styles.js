@@ -37,7 +37,7 @@ export default makeStyles((theme) => ({
   },
   registerButton: {
     position: "absolute",
-    right: 200,
+    right: 160,
     fontSize: 20,
   },
 }));

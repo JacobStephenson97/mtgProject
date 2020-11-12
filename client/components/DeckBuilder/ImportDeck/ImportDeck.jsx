@@ -18,6 +18,9 @@ const useStyles = makeStyles({
       color: "rgba(255, 255, 255)",
     },
   },
+  missingCardsName: {
+    textAlign: "center",
+  },
 });
 
 function MissingCards({ missingCards, open, onClose, selectedValue }) {
@@ -37,7 +40,7 @@ function MissingCards({ missingCards, open, onClose, selectedValue }) {
       </DialogTitle>
       {missingCards.map((card, i) => (
         <div className={classes.deckNameContainer} key={i}>
-          <p>{card}</p>
+          <p className={classes.missingCardsName}>{card}</p>
         </div>
       ))}
     </Dialog>

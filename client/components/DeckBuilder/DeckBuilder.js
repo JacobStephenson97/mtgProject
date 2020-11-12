@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import StatsPanel from "./StatsPanel/StatsPanel";
 import { SearchArea } from "./SearchArea/SearchArea";
+import Slider from "@material-ui/core/Slider";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -85,6 +86,10 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
   },
+  slider: {
+    maxWidth: 500,
+    alignSelf: "center",
+  },
 }));
 
 function addCard(cardObject, setCurrentDeck) {
@@ -108,11 +113,16 @@ export function DeckBuilder(props) {
   const [subscription, setSubscription] = useState(null);
   const [collapseSearch, setCollapseSearch] = useState(false);
   const [collapseStats, setCollapseStats] = useState(true);
+  const [imageSize, setImageSize] = useState({ height: 262, width: 187 });
+  const [value, setValue] = useState(0);
   const classes = useStyles();
 
   function handleCollapse() {
     setCollapseSearch(!collapseSearch);
   }
+  const handleChange = (name) => (event, newValue) => {
+    setImageSize({ [name]: newValue, width: newValue * 0.7 });
+  };
   return (
     <div className={classes.bigContainer}>
       <SearchArea
@@ -124,6 +134,16 @@ export function DeckBuilder(props) {
         subscription={subscription}
         setSubscription={setSubscription}
         collapseSearch={collapseSearch}
+        imageSize={imageSize}
+      />
+      <Slider
+        defaultValue={imageSize.height}
+        aria-labelledby="discrete-slider"
+        valueLabelDisplay="auto"
+        min={100}
+        onChange={handleChange("height")}
+        max={400}
+        className={classes.slider}
       />
 
       <div className={classes.deckArea}>
@@ -133,6 +153,7 @@ export function DeckBuilder(props) {
           setCurrentDeck={setCurrentDeck}
           toggleGraph={toggleGraph}
           handleCollapse={handleCollapse}
+          imageSize={imageSize}
         />
       </div>
       {!collapseStats ? (

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { makeStyles, rgbToHex } from "@material-ui/core/styles";
-import MtgCard from "../SearchComponent/Card";
 import { card } from "mtgsdk";
 import Card from "@material-ui/core/Card";
 import { InputBase } from "@material-ui/core";
@@ -23,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "space-between",
     overflowY: "auto",
-    overflowX: "hidden",
+    overflowX: "auto",
     height: "98%",
     paddingLeft: 20,
     paddingRight: 20,
@@ -53,6 +52,7 @@ export default ({
   setCurrentDeck,
   toggleGraph,
   handleCollapse,
+  imageSize,
 }) => {
   const classes = useStyles();
   const [search, setSearch] = useState("");
@@ -155,6 +155,7 @@ export default ({
               search={search}
               hoverDelay={hoverDelay}
               currentDeck={currentDeck}
+              imageSize={imageSize}
             />
           </div>
         </DragDropContext>

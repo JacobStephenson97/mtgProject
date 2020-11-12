@@ -68,23 +68,36 @@ export function SearchArea({
   subscription,
   setSubscription,
   collapseSearch,
+  imageSize,
 }) {
   const classes = useStyles();
   const [focused, setFocused] = useState(false);
 
-  const { cards, isLoading } = useTracker(() => {
+  const { cards, isLoading, singleCards } = useTracker(() => {
     const noDataAvailable = { cards: [] };
     const handler = Meteor.subscribe("cardSearch", search);
-
+    Counts.get("cardSearch");
+    console.log(handler);
     if (!handler.ready() || search == "") {
       return { noDataAvailable, isLoading: true };
     }
 
-    const cards = Cards.find(
-      { name: { $regex: new RegExp(search, "i") } },
-      { limit: 20 }
-    ).fetch();
-    return { cards };
+    const cards = Cards.find().fetch();
+    console.log(cards);
+    const uniqueNames = _.uniq(
+      cards.map(function (x) {
+        return x.name;
+      }),
+      true
+    );
+
+    uniq = [...new Set(uniqueNames)];
+
+    const singleCards = uniq.map((name) =>
+      cards.find(({ name: cName }) => cName === name)
+    );
+    console.log(singleCards);
+    return { singleCards };
   });
   return (
     <div
@@ -111,11 +124,12 @@ export function SearchArea({
       </Card>
       <Card className={classes.searchCard}>
         <MtgCards
-          cards={cards}
+          cards={singleCards}
           addCard={addCard}
           setCurrentDeck={setCurrentDeck}
           currentDeck={currentDeck}
           search={search}
+          imageSize={imageSize}
         />
       </Card>
     </div>

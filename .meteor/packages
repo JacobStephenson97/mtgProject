@@ -24,3 +24,5 @@ accounts-ui
 accounts-password
 react-meteor-data
 underscore
+ros:publish-counts
+meteorhacks:aggregate
