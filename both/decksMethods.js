@@ -1,4 +1,4 @@
-import { Decks } from "./collections";
+import { Decks, Cards } from "./collections";
 import { check } from "meteor/check";
 
 Meteor.methods({

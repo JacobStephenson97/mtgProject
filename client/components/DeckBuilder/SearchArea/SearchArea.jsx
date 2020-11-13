@@ -76,6 +76,7 @@ export function SearchArea({
   const { cards, isLoading, singleCards } = useTracker(() => {
     const noDataAvailable = { cards: [] };
     const handler = Meteor.subscribe("cardSearch", search);
+
     Counts.get("cardSearch");
     console.log(handler);
     if (!handler.ready() || search == "") {
@@ -84,20 +85,8 @@ export function SearchArea({
 
     const cards = Cards.find().fetch();
     console.log(cards);
-    const uniqueNames = _.uniq(
-      cards.map(function (x) {
-        return x.name;
-      }),
-      true
-    );
 
-    uniq = [...new Set(uniqueNames)];
-
-    const singleCards = uniq.map((name) =>
-      cards.find(({ name: cName }) => cName === name)
-    );
-    console.log(singleCards);
-    return { singleCards };
+    return { cards };
   });
   return (
     <div
@@ -111,8 +100,7 @@ export function SearchArea({
           type="search"
           value={search}
           onChange={(e) => {
-            if (subscription) subscription.stop();
-            handleValueChange(e, setSearch, setSubscription);
+            setSearch(e.target.value);
           }}
           id="outlined-full-width"
           fullWidth
@@ -124,7 +112,7 @@ export function SearchArea({
       </Card>
       <Card className={classes.searchCard}>
         <MtgCards
-          cards={singleCards}
+          cards={cards}
           addCard={addCard}
           setCurrentDeck={setCurrentDeck}
           currentDeck={currentDeck}
