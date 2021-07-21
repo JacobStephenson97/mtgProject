@@ -85,7 +85,7 @@ Create a local Mongodb instance for yourself or contact me for access to my curr
 
 If you have access to the mongoDB atlas, log in [here](https://cloud.mongodb.com/)
 
-Click connect: [![Mongo connect Screenshot][connect-screenshot]]
+Click connect: ![Mongo connect Screenshot][connect-screenshot]
 
 Copy the URI from either of the second option (Connect your application), it should look like:
 ```
