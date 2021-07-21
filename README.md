@@ -98,6 +98,7 @@ as well as in `server/db/index.js`
    ```
 
 Then start by the server and client by using:
+<br>
 in the `server` Directory
    ```sh
    nodemon index.js
