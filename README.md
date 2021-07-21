@@ -97,6 +97,14 @@ as well as in `server/db/index.js`
    const uri = "URI";
    ```
 
+Then start by the server by using in `/server`
+    ```sh
+    nodemon index.js
+    ```
+and the client `/client`
+    ```sh
+    yarn start
+    ```
 *To be updated*
 
 
