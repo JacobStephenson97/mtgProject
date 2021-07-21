@@ -1,0 +1,22 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "mtgproject server",
+  "main": "index.js",
+  "repository": "git@github.com:JacobStephenson97/mtgProject2.git",
+  "author": "Jacob",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongodb": "^4.0.0",
+    "mongoose": "^5.13.3",
+    "nodemon": "^2.0.12",
+    "bcryptjs": "^2.4.3",
+    "connect-mongo": "^4.4.1",
+    "express-session": "^1.17.2",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0"
+  }
+}
