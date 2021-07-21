@@ -19,12 +19,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/JacobStephenson97/mtgProject2.git"
+    "url": "git+ssh://git@github.com/JacobStephenson97/mtgProject.git"
   },
   "author": "Jacob",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/JacobStephenson97/mtgProject2/issues"
+    "url": "https://github.com/JacobStephenson97/mtgProject/issues"
   },
-  "homepage": "https://github.com/JacobStephenson97/mtgProject2#readme"
+  "homepage": "https://github.com/JacobStephenson97/mtgProject#readme"
 }

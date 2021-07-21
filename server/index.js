@@ -8,7 +8,7 @@ const auth = require("./routes/auth")
 
 const app = express()
 const apiPort = 5000
-const MONGO_URI = "mongodb+srv://Jacobstephenson97:root@cluster0.nhwp5.mongodb.net/mtgproject?retryWrites=true&w=majority"
+const MONGO_URI = "URI"
 
 const CardRouter = require('./routes/card-router')
 
