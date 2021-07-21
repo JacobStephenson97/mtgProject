@@ -98,11 +98,11 @@ as well as in `server/db/index.js`
    ```
 
 Then start by the server and client by using
-1. in the `/server` Directory
+1. in the `server` Directory
    ```sh
    nodemon index.js
    ```
-2. in the `/client` Directory
+2. in the `client` Directory
    ```sh
    yarn start
    ```
