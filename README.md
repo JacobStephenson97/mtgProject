@@ -97,15 +97,15 @@ as well as in `server/db/index.js`
    const uri = "URI";
    ```
 
-Then start by the server by using in `/server`
-    ```sh
-    nodemon index.js
-    ```
-and the client `/client`
-    ```sh
-    yarn start
-    ```
-*To be updated*
+Then start by the server and client by using
+1. in the `/server` Directory
+   ```sh
+   nodemon index.js
+   ```
+2. in the `/client` Directory
+   ```sh
+   yarn start
+   ```
 
 
 
