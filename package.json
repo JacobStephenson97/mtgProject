@@ -1,0 +1,30 @@
+{
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-mongo": "^4.4.1",
+    "express-session": "^1.17.2",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.0"
+  },
+  "name": "mtgproject3",
+  "version": "1.0.0",
+  "description": "Revamp of mtgproject",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "dev-start": "concurrently \"cd server && yarn nodemon index.js\" \"cd client && yarn start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/JacobStephenson97/mtgProject2.git"
+  },
+  "author": "Jacob",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JacobStephenson97/mtgProject2/issues"
+  },
+  "homepage": "https://github.com/JacobStephenson97/mtgProject2#readme"
+}
