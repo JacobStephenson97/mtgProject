@@ -70,7 +70,7 @@ This is an example of how to list things you need to use the software and how to
    ```
 2. Install NPM packages
    ```sh
-   npm install
+   npm run install-all-deps
    ```
 
 <!-- USAGE EXAMPLES -->
@@ -99,15 +99,9 @@ as well as in `server/db/index.js`
 
 Then start by the server and client by using:
 <br>
-in the `server` Directory
    ```sh
-   nodemon index.js
+   npm run dev-start
    ```
-in the `client` Directory
-   ```sh
-   yarn start
-   ```
-
 
 
 <!-- CONTRIBUTING -->
