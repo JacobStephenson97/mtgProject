@@ -8,12 +8,12 @@ const auth = require("./routes/auth")
 
 const app = express()
 const apiPort = 5000
-const MONGO_URI = "URI"
+const MONGO_URI = require('./db/index')
 
 const CardRouter = require('./routes/card-router')
 
 mongoose
-    .connect(MONGO_URI, { useNewUrlParser: true })
+    .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
     .then(console.log(`MongoDB connected ${MONGO_URI}`))
     .catch(err => console.log(err));
 
@@ -42,7 +42,6 @@ app.use('/api/card', CardRouter);
 app.use('/api/auth', auth);
 app.get("/user", (req, res) => {
     res.send(req.user);
-    console.log(req.user);
 })
 app.get('/logout', function (req, res) {
     req.logout();

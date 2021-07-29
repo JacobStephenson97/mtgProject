@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/JacobStephenson97/mtgProject/issues"
   },
-  "homepage": "https://github.com/JacobStephenson97/mtgProject#readme"
+  "homepage": "https://github.com/JacobStephenson97/mtgProject#readme",
+  "dependencies": {
+    "react-transition-group": "^4.4.2"
+  }
 }

@@ -92,10 +92,6 @@ Enter your API in `server/index.js`
    ```JS
    const MONGO_URI = "URI";
    ```
-as well as in `server/db/index.js`
-   ```JS
-   const uri = "URI";
-   ```
 
 Then start by the server and client by using:
 <br>

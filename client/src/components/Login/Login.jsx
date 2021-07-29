@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
-import { makeStyles, rgbToHex } from '@material-ui/core/styles';
+import React, { useState, useRef } from "react";
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
-import { BrowserRouter as Router, Route, Switch, Redirect, useHistory } from "react-router-dom";
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     loginButton: {
@@ -48,34 +48,19 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default ({ setTab }) => {
+const Login = ({ setUser, setValue, getUser }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const classes = useStyles();
     const inputRef = useRef('form');
     const history = useHistory();
+
     function handleValueChange(e, type) {
         const {
             target: { value }
         } = e;
         if (type === 'email') setEmail(value);
         else if (type === "password") setPassword(value);
-    }
-    function handleRegister() {
-        //     Accounts.createUser(
-        //         { email: email, password: password },
-        //         error => {
-        //             if (error) console.log(error);
-        //             else setTab(0);
-        //         }
-        //     );
-    }
-
-    function handleLogin() {
-        //     Meteor.loginWithPassword(email, password, error => {
-        //         if (error) console.log('ERROR');
-        //         else setTab(0);
-        //     });
     }
     const onSubmit = e => {
         e.preventDefault();
@@ -88,17 +73,21 @@ export default ({ setTab }) => {
             .post("/api/auth/register_login", userData)
             .then(res => {
                 console.log(res);
+                getUser();
+                setValue(1);
+                history.push("/deckbuilder")
             })
             .catch(err => {
                 console.log(err);
                 console.log(err.response);
             });
+
     };
     return (
         <div className={classes.loginContainer}>
             <Card className={classes.loginCard}>
                 <div >
-                    <img src='/mtgicon.jpg' className={classes.icon} />
+                    <img src='/mtgicon.jpg' className={classes.icon} alt="mtgicon" />
                 </div>
                 <ValidatorForm
                     ref={inputRef}
@@ -131,9 +120,6 @@ export default ({ setTab }) => {
                             errorMessages={['this field is required']}
                         />
                     </div>
-                    <Button onClick={handleRegister} variant="outlined" color="primary" className={classes.registerButton}>
-                        Register
-                    </Button>
                     <Button type="submit" variant="contained" color="primary" className={classes.loginButton}>
                         Login
                     </Button>
@@ -142,3 +128,4 @@ export default ({ setTab }) => {
         </div>
     );
 };
+export default Login;
