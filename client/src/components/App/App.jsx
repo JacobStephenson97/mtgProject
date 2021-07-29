@@ -49,7 +49,6 @@ const App = () => {
         else if (path === "/deckbuilder" && value !== 1) setValue(1);
         else if (path === "/login" && value !== 2) setValue(2);
     }, [value,]);
-    console.log(user)
     return (
         <BrowserRouter>
             <div className={classes.root}>

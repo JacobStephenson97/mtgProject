@@ -28,6 +28,7 @@ export function CardInspect({ addCard, currentDeck, setCurrentDeck, search, setS
     return (
         <div className={classes.cardInspectContainer}>
 
+
         </div>
 
     )

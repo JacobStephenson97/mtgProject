@@ -6,14 +6,14 @@ getCardByName = async (req, res) => {
     try {
         await client.connect();
         const database = client.db("mtgproject");
-        const cards = database.collection("uniqueartcards");
+        const cards = database.collection("oraclecards");
         // query for movies that have a runtime less than 15 minutes
-        const query = { name: new RegExp(req.params.name, 'i'), lang: "en" };
+        const query = { name: new RegExp(req.params.name, 'i'), lang: "en", layout: { $not: new RegExp("art_series") } };
         const options = {
             // sort returned documents in ascending order by title (A->Z)
             sort: { name: 1 },
             // Include only the `title` and `imdb` fields in each returned document
-            projection: { name: 1, image_uris: 1 },
+            // projection: { name: 1, image_uris: 1 },
         };
         const cursor = cards.find(query, options).limit(100)
         // print a message if no documents were found
